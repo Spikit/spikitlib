@@ -1,4 +1,4 @@
-export default class View {
+export class View {
 
   protected _path: string = ''
   protected _data: any = {}
@@ -10,4 +10,8 @@ export default class View {
     this._path = path.replace(/\./g, '/')
     this._data = data || {}
   }
+}
+
+export const view = function (path: string, data?: object) {
+  return new View(path, data)
 }

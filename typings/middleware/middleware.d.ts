@@ -1,1 +1,1 @@
-export { Locale } from './Locale';
+export * from './Locale';

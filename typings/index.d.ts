@@ -1,9 +1,5 @@
-import { AppOptions } from './core/App';
-import Response from './core/Response';
-import View from './core/View';
-export { Route as route, RouteGroup } from './core/Route';
-export { Locale } from './middleware/middleware';
+import { AppOptions } from './interfaces';
+export { view, response, route } from './core';
+export * from './middleware';
 export declare const init: (options: AppOptions) => void;
 export declare const start: () => void;
-export declare const response: (body?: any) => Response;
-export declare const view: (path: string, data?: object | undefined) => View;
