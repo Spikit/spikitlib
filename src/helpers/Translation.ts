@@ -11,6 +11,9 @@ export class Translation {
     let parts = key.split('.')
     let transKey = parts.pop()
     let file = require(path.join(process.cwd(), 'resources/lang', this.locale, parts.join('/')) + '.json')
-    console.log(file[transKey])
+    if (file) {
+      return file[transKey] || fallback
+    }
+    return fallback
   }
 }
