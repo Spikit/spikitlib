@@ -192,7 +192,3 @@ export class RouteGroup extends Route {
     return Route.group(options, callback)
   }
 }
-
-export const route = function () {
-  return Route
-}
