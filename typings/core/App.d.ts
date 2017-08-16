@@ -6,6 +6,7 @@ export interface AppServerOptions {
 export interface AppViewOptions {
     engine: string;
     paths: string[];
+    basedir: string;
 }
 export interface AppOptions {
     view: AppViewOptions;
