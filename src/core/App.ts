@@ -1,6 +1,9 @@
 import * as express from 'express'
 import { Express, RequestHandler } from 'express'
 import * as session from 'express-session'
+import * as sass from 'node-sass-middleware'
+import * as bodyParser from 'body-parser'
+import * as cookieParser from 'cookie-parser'
 import * as compression from 'compression'
 import * as path from 'path'
 
@@ -18,6 +21,7 @@ export interface AppOptions {
   view: AppViewOptions
   server: AppServerOptions
   static: string[]
+  sass: any
 }
 
 export class App {
@@ -32,6 +36,9 @@ export class App {
 
   public static init(options: AppOptions) {
     this._express = express()
+    this._express.use(cookieParser())
+    this._express.use(sass(options.sass))
+    this._express.use(bodyParser.json())
     this._express.use(compression())
     // Setup the static routes
     options.static.forEach(file => {
