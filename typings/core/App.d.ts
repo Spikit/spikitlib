@@ -12,6 +12,7 @@ export interface AppOptions {
     view: AppViewOptions;
     server: AppServerOptions;
     static: string[];
+    sass: any;
 }
 export declare class App {
     private static _express;

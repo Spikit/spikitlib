@@ -20,7 +20,7 @@ export class Urls {
     if (route.length == 0) {
       throw new Error(`Named route '${name}' does not exist`)
     }
-    let params = route.match(regex)
+    let params = route.match(regex) || []
     if (params.length != args.length) {
       throw new Error('Invalid argument count: route takes ' + params.length + ' arguments but ' + args.length + ' arguments given')
     }
