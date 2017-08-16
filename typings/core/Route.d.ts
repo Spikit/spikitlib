@@ -3,12 +3,15 @@ import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } 
 import View from './View';
 import Response from './Response';
 export interface RouteGroupOptions {
-    middleware?: ((req: ExpressRequest, res: ExpressResponse, next: NextFunction) => void)[];
+    middleware?: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[];
     namespace?: string;
     prefix?: string;
 }
 export interface RouteController {
-    (req: ExpressRequest): Response | View | void;
+    (req: SpikitRequest): Response | View | void;
+}
+export interface SpikitRequest extends ExpressRequest {
+    locale: string;
 }
 export declare class Route {
     protected static _routeNames: {
@@ -20,7 +23,7 @@ export declare class Route {
         route: string;
     }[];
     protected static currentGroup: RouteGroup | null;
-    protected static currentMiddleware: ((req: ExpressRequest, res: ExpressResponse, next: NextFunction) => void)[];
+    protected static currentMiddleware: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[];
     protected static currentPrefix: string;
     protected static lastRoute: string;
     static group(options: RouteGroupOptions, callback: (route: RouteGroup) => void): typeof Route;

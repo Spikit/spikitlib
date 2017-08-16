@@ -1,3 +1,5 @@
 export declare class Translation {
-    static get(key: string, fallback?: string): void;
+    private locale;
+    constructor(locale: string);
+    get(key: string, fallback?: string): void;
 }
