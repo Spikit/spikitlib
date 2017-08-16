@@ -2,27 +2,9 @@ import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } 
 import * as path from 'path'
 import * as url from 'url'
 
-import { App } from './App'
-import View from './View'
-import Response from './Response'
-
-import { Strings } from '../helpers/Strings'
-import { Urls } from '../helpers/Urls'
-import { Translation } from '../helpers/Translation'
-
-export interface RouteGroupOptions {
-  middleware?: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[]
-  namespace?: string
-  prefix?: string
-}
-
-export interface RouteController {
-  (req: SpikitRequest): Response | View | void
-}
-
-export interface SpikitRequest extends ExpressRequest {
-  locale: string
-}
+import { App, View, Response } from '.'
+import { Strings, Urls, Translation } from '../helpers'
+import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 
 export class Route {
 
@@ -209,4 +191,8 @@ export class RouteGroup extends Route {
   public group(options: RouteGroupOptions, callback: (route: RouteGroup) => void) {
     return Route.group(options, callback)
   }
+}
+
+export const route = function () {
+  return Route
 }

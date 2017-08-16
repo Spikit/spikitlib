@@ -1,4 +1,4 @@
-export default class Response {
+export class Response {
 
   private _headers: any = {}
   private _body: any
@@ -20,4 +20,8 @@ export default class Response {
     return this
   }
 
+}
+
+export const response = function (body?: any) {
+  return new Response(body)
 }

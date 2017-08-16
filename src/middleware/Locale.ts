@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import { App } from '../core/App'
 import * as sessions from 'express-session'
 
-export interface SpikitRequest extends Request {
-  locale: string
-}
+import { App } from '../core'
+import { SpikitRequest } from '../interfaces'
 
 export class Locale {
 

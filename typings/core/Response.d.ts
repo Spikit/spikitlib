@@ -1,4 +1,4 @@
-export default class Response {
+export declare class Response {
     private _headers;
     private _body;
     readonly body: any;
@@ -7,3 +7,4 @@ export default class Response {
     toType(contentType: string): this;
     toJson(data?: any): this;
 }
+export declare const response: (body?: any) => Response;

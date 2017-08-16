@@ -1,19 +1,11 @@
-import { App, AppOptions } from './core/App'
-import Response from './core/Response'
-import View from './core/View'
+import { App, View } from './core'
+import { AppOptions } from './interfaces'
 
 // Export Routes
-export { Route as route, RouteGroup } from './core/Route'
+// export { AppOptions } from './interfaces'
+export { view, response, route } from './core'
 // Export Middleware
-export { Locale } from './middleware/middleware'
+export * from './middleware'
 
 export const init = function (options: AppOptions) { App.init(options) }
 export const start = function () { App.start() }
-
-export const response = function (body?: any) {
-  return new Response(body)
-}
-
-export const view = function (path: string, data?: object) {
-  return new View(path, data)
-}

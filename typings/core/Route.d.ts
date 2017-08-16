@@ -1,18 +1,6 @@
 /// <reference types="express" />
-import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express';
-import View from './View';
-import Response from './Response';
-export interface RouteGroupOptions {
-    middleware?: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[];
-    namespace?: string;
-    prefix?: string;
-}
-export interface RouteController {
-    (req: SpikitRequest): Response | View | void;
-}
-export interface SpikitRequest extends ExpressRequest {
-    locale: string;
-}
+import { Response as ExpressResponse, NextFunction } from 'express';
+import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces';
 export declare class Route {
     protected static _routeNames: {
         name: string;
@@ -50,3 +38,4 @@ export declare class RouteGroup extends Route {
     all(routePath: string, controller: RouteController | string): typeof Route;
     group(options: RouteGroupOptions, callback: (route: RouteGroup) => void): typeof Route;
 }
+export declare const route: () => typeof Route;
