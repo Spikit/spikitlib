@@ -7,7 +7,7 @@ export interface SpikitRequest extends Request {
 }
 
 export class Locale {
-  public handle(req: SpikitRequest, res: Response, next: NextFunction) {
+  public static handle(req: SpikitRequest, res: Response, next: NextFunction) {
     // If no locale is set, set a default
     if (!req.cookies.locale) {
       // Save the locale to the current request

@@ -4,5 +4,5 @@ export interface SpikitRequest extends Request {
     locale: string;
 }
 export declare class Locale {
-    handle(req: SpikitRequest, res: Response, next: NextFunction): void;
+    static handle(req: SpikitRequest, res: Response, next: NextFunction): void;
 }
