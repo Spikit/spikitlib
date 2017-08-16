@@ -38,4 +38,3 @@ export declare class RouteGroup extends Route {
     all(routePath: string, controller: RouteController | string): typeof Route;
     group(options: RouteGroupOptions, callback: (route: RouteGroup) => void): typeof Route;
 }
-export declare const route: () => typeof Route;
