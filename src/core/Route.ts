@@ -122,7 +122,7 @@ export class Route {
         response.data['url'] = Urls.url
         // String helpers
         response.data['slug'] = Strings.slug
-        response.data['trans'] = trans.get
+        response.data['trans'] = trans.get.bind(trans)
         // Path helpers
         response.data['path'] = path
         // Other data

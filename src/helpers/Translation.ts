@@ -10,7 +10,7 @@ export class Translation {
   public get(key: string, fallback: string = '') {
     let parts = key.split('.')
     let transKey = parts.pop()
-    let file = require(path.join(process.cwd(), 'resources/lang', this.locale, parts.join('/'), '.json'))
-    console.log(file)
+    let file = require(path.join(process.cwd(), 'resources/lang', this.locale, parts.join('/')) + '.json')
+    console.log(file[transKey])
   }
 }
