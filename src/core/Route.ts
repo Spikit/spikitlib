@@ -8,6 +8,7 @@ import Response from './Response'
 
 import { Strings } from '../helpers/Strings'
 import { Urls } from '../helpers/Urls'
+import { Translation } from '../helpers/Translation'
 
 export interface RouteGroupOptions {
   middleware?: ((req: ExpressRequest, res: ExpressResponse, next: NextFunction) => void)[]
@@ -116,6 +117,7 @@ export class Route {
         response.data['url'] = Urls.url
         // String helpers
         response.data['slug'] = Strings.slug
+        response.data['trans'] = Translation.get
         // Path helpers
         response.data['path'] = path
         // Other data

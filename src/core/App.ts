@@ -37,7 +37,9 @@ export class App {
   public static init(options: AppOptions) {
     this._express = express()
     this._express.use(cookieParser())
-    this._express.use(sass(options.sass))
+    if (options.sass.enabled) {
+      this._express.use(sass(options.sass))
+    }
     this._express.use(bodyParser.json())
     this._express.use(compression())
     // Setup the static routes
