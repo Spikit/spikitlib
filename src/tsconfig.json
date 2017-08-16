@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "../lib",
+    "strict": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "declaration": true,
+    "declarationDir": "../typings",
+    "removeComments": true
+  },
+  "files": [
+    "index"
+  ]
+}
