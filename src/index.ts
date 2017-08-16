@@ -4,6 +4,8 @@ import View from './core/View'
 
 // Export Routes
 export { Route as route, RouteGroup } from './core/Route'
+// Export Middleware
+export { Locale } from './middleware/middleware'
 
 export const init = function (options: AppOptions) { App.init(options) }
 export const start = function () { App.start() }

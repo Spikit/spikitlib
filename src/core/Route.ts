@@ -11,13 +11,17 @@ import { Urls } from '../helpers/Urls'
 import { Translation } from '../helpers/Translation'
 
 export interface RouteGroupOptions {
-  middleware?: ((req: ExpressRequest, res: ExpressResponse, next: NextFunction) => void)[]
+  middleware?: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[]
   namespace?: string
   prefix?: string
 }
 
 export interface RouteController {
-  (req: ExpressRequest): Response | View | void
+  (req: SpikitRequest): Response | View | void
+}
+
+export interface SpikitRequest extends ExpressRequest {
+  locale: string
 }
 
 export class Route {
@@ -30,7 +34,7 @@ export class Route {
   }
 
   protected static currentGroup: RouteGroup | null = null
-  protected static currentMiddleware: ((req: ExpressRequest, res: ExpressResponse, next: NextFunction) => void)[] = []
+  protected static currentMiddleware: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[] = []
   protected static currentPrefix: string = ''
   protected static lastRoute: string = ''
 
@@ -54,7 +58,7 @@ export class Route {
 
   public static get(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.express.get(this.lastRoute, this.currentMiddleware, async function (req: ExpressRequest, res: ExpressResponse) {
+    App.express.get(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -62,7 +66,7 @@ export class Route {
 
   public static post(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.express.post(this.lastRoute, this.currentMiddleware, async function (req: ExpressRequest, res: ExpressResponse) {
+    App.express.post(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -70,7 +74,7 @@ export class Route {
 
   public static put(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.express.put(this.lastRoute, this.currentMiddleware, async function (req: ExpressRequest, res: ExpressResponse) {
+    App.express.put(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -78,7 +82,7 @@ export class Route {
 
   public static delete(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.express.delete(this.lastRoute, this.currentMiddleware, async function (req: ExpressRequest, res: ExpressResponse) {
+    App.express.delete(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -86,7 +90,7 @@ export class Route {
 
   public static patch(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.express.patch(this._getPath(routePath), this.currentMiddleware, async function (req: ExpressRequest, res: ExpressResponse) {
+    App.express.patch(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -94,7 +98,7 @@ export class Route {
 
   public static all(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.express.all(this._getPath(routePath), this.currentMiddleware, async function (req: ExpressRequest, res: ExpressResponse) {
+    App.express.all(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -107,17 +111,18 @@ export class Route {
     })
   }
 
-  private static async _runController(req: ExpressRequest, res: ExpressResponse, controller: RouteController) {
+  private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController) {
     if (typeof controller == 'function') {
       let response = await controller(req)
       if (response instanceof View) {
+        let trans = new Translation(req.locale || 'en')
         // Url helpers
         // response.data['url'] = url
         response.data['route'] = Urls.route
         response.data['url'] = Urls.url
         // String helpers
         response.data['slug'] = Strings.slug
-        response.data['trans'] = Translation.get
+        response.data['trans'] = trans.get
         // Path helpers
         response.data['path'] = path
         // Other data
@@ -141,7 +146,7 @@ export class Route {
     return error
   }
 
-  private static async _runRoute(controller: RouteController | string, req: ExpressRequest, res: ExpressResponse) {
+  private static async _runRoute(controller: RouteController | string, req: SpikitRequest, res: ExpressResponse) {
     App.host = `${req.protocol}://${req.get('host')}`
     controller = await Route._getController(controller)
     let response = await Route._runController(req, res, controller)

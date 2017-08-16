@@ -7,6 +7,12 @@ import * as cookieParser from 'cookie-parser'
 import * as compression from 'compression'
 import * as path from 'path'
 
+export interface AppMainOptions {
+  locale: string
+  locales: {}[]
+  static: string[]
+}
+
 export interface AppServerOptions {
   port: number
 }
@@ -17,24 +23,37 @@ export interface AppViewOptions {
   basedir: string
 }
 
+export interface AppKernel {
+  middleware: any[]
+  middlewareGroups: any[]
+}
+
 export interface AppOptions {
+  app: AppMainOptions
   view: AppViewOptions
   server: AppServerOptions
   static: string[]
   sass: any
+  kernel: AppKernel
 }
 
 export class App {
 
   private static _express: Express
   private static _server: AppServerOptions
+  private static _options: AppOptions
   public static host: string = ''
 
   public static get express(): Express {
     return this._express
   }
 
+  public static get options(): AppOptions {
+    return this._options
+  }
+
   public static init(options: AppOptions) {
+    this._options = options
     this._express = express()
     this._express.use(cookieParser())
     if (options.sass.enabled) {
@@ -46,6 +65,7 @@ export class App {
     options.static.forEach(file => {
       this._express.use(express.static(file))
     })
+    this._express.use(options.kernel.middleware)
     // Setup the view engine
     this._express.set('view engine', options.view.engine)
     this._express.set('views', options.view.paths)
