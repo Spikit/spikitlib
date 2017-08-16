@@ -65,7 +65,9 @@ export class App {
     options.static.forEach(file => {
       this._express.use(express.static(file))
     })
-    this._express.use(options.kernel.middleware)
+    options.kernel.middleware.forEach(m => {
+      this._express.use(m.handle);
+    })
     // Setup the view engine
     this._express.set('view engine', options.view.engine)
     this._express.set('views', options.view.paths)

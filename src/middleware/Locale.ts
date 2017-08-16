@@ -14,6 +14,8 @@ export class Locale {
       req.locale = App.options.app.locale
       // Save the locale to the users cookie
       res.cookie('locale', req.locale)
+    } else {
+      req.locale = req.cookies.locale
     }
     next()
   }
