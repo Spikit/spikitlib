@@ -13,8 +13,11 @@ export interface AppViewOptions {
     paths: string[];
     basedir: string;
 }
+export interface SpikitRequestHandler {
+    handle: RequestHandler;
+}
 export interface AppKernel {
-    middleware: any[];
+    middleware: SpikitRequestHandler[];
     middlewareGroups: any[];
 }
 export interface AppOptions {

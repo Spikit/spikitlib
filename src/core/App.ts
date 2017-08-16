@@ -23,8 +23,12 @@ export interface AppViewOptions {
   basedir: string
 }
 
+export interface SpikitRequestHandler {
+  handle: RequestHandler
+}
+
 export interface AppKernel {
-  middleware: any[]
+  middleware: SpikitRequestHandler[]
   middlewareGroups: any[]
 }
 
@@ -65,6 +69,7 @@ export class App {
     options.static.forEach(file => {
       this._express.use(express.static(file))
     })
+    // Setup the applications middleware
     options.kernel.middleware.forEach(m => {
       this._express.use(m.handle);
     })
