@@ -11,6 +11,7 @@ export interface AppServerOptions {
 export interface AppViewOptions {
   engine: string
   paths: string[]
+  basedir: string
 }
 
 export interface AppOptions {
@@ -40,6 +41,7 @@ export class App {
     this._express.set('view engine', options.view.engine)
     this._express.set('views', options.view.paths)
     this._server = options.server
+    this._express.locals.basedir = options.view.basedir
   }
 
   public static set(setting: string, value: any) {
