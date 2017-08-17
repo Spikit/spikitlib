@@ -9,5 +9,4 @@ export class Ajax {
       res.sendStatus(400)
     }
   }
-
 }

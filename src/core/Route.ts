@@ -5,6 +5,7 @@ import * as url from 'url'
 import { App, View, Response } from '.'
 import { Strings, Urls, Translation } from '../helpers'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
+import { Middleware } from '../middleware/Middleware'
 
 export class Route {
 
@@ -91,13 +92,15 @@ export class Route {
       name: name,
       route: this.lastRoute
     })
+    return this
   }
 
-  // public static middleware(...middleware: Middleware[]) {
-  //   middleware.forEach(m => {
-  //     // m.handle()
-  //   })
-  // }
+  public static middleware(...middleware: Middleware[]) {
+    middleware.forEach(m => {
+      App.express.route(this.lastRoute).all(m.handle)
+    })
+    return this
+  }
 
   private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController) {
     if (typeof controller == 'function') {
@@ -196,5 +199,9 @@ export class RouteGroup extends Route {
 
   public group(options: RouteGroupOptions, callback: (route: RouteGroup) => void) {
     return Route.group(options, callback)
+  }
+
+  public middleware(...middleware: Middleware[]) {
+    return Route.middleware(...middleware)
   }
 }
