@@ -131,7 +131,7 @@ export class Route {
         for (let h in response.headers) {
           res.setHeader(h, response.headers[h])
         }
-        res.send(response.body)
+        res.send(response.body || '')
       } else {
         res.sendStatus(200)
       }
