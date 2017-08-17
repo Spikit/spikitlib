@@ -24,7 +24,6 @@ export interface AppOptions {
     app: AppMainOptions;
     view: AppViewOptions;
     server: AppServerOptions;
-    static: string[];
     sass: any;
     kernel: AppKernel;
 }

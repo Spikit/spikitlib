@@ -12,6 +12,7 @@
         "@types/body-parser": "^1.16.4",
         "@types/cookie-parser": "^1.4.0",
         "@types/express-session": "^1.15.2",
+        "@types/glob": "^5.0.31",
         "@types/node": "^8.0.22",
         "@types/node-sass-middleware": "0.0.29",
         "body-parser": "^1.17.2",
@@ -19,6 +20,7 @@
         "cookie-parser": "^1.4.3",
         "express": "^4.15.4",
         "express-session": "^1.15.5",
+        "glob": "^7.1.2",
         "mongoose": "^4.11.7",
         "node-sass-middleware": "^0.11.0",
         "pug": "^2.0.0-rc.3"

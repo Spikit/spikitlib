@@ -6,6 +6,7 @@ import * as bodyParser from 'body-parser'
 import * as cookieParser from 'cookie-parser'
 import * as compression from 'compression'
 import * as path from 'path'
+import * as glob from 'glob'
 
 import { AppOptions, AppServerOptions } from '../interfaces'
 
@@ -15,6 +16,8 @@ export class App {
   private static _server: AppServerOptions
   private static _options: AppOptions
   public static host: string = ''
+  private static _appRoot: string = ''
+  private static _projectRoot: string = ''
 
   public static get express(): Express {
     return this._express
@@ -22,6 +25,30 @@ export class App {
 
   public static get options(): AppOptions {
     return this._options
+  }
+
+  public static get appRoot(): string {
+    return this._appRoot
+  }
+
+  public static get projectRoot(): string {
+    return this._projectRoot
+  }
+
+  public static run(projectRoot: string, appRoot: string) {
+    this._appRoot = appRoot
+    this._projectRoot = projectRoot
+    this.init({
+      app: require(path.join(appRoot, '/config/app')),
+      view: require(path.join(appRoot, '/config/view')),
+      server: require(path.join(appRoot, '/config/server')),
+      sass: require(path.join(appRoot, '/config/sass')),
+      kernel: require(path.join(appRoot, '/http/Kernel'))
+    })
+    glob(path.join(appRoot, '/routes/**/*.js'), (err, files: string[]) => {
+      files.forEach(file => require(file))
+      this.start()
+    })
   }
 
   public static init(options: AppOptions) {
@@ -34,7 +61,7 @@ export class App {
     this._express.use(bodyParser.json())
     this._express.use(compression())
     // Setup the static routes
-    options.static.forEach(file => {
+    options.app.static.forEach(file => {
       this._express.use(express.static(file))
     })
     // Setup the applications middleware
