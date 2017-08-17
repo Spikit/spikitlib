@@ -1,9 +1,10 @@
-import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express'
+import { Request as ExpressRequest, RequestHandler, Response as ExpressResponse, NextFunction } from 'express'
 import * as path from 'path'
 import * as url from 'url'
 
 import { App, View, Response } from '.'
 import { Strings, Urls, Translation } from '../helpers'
+import { Middleware } from '../middleware'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 
 export class Route {
@@ -90,6 +91,12 @@ export class Route {
     this._routeNames.push({
       name: name,
       route: this.lastRoute
+    })
+  }
+
+  public static middleware(...middleware: Middleware[]) {
+    middleware.forEach(m => {
+      // m.handle()
     })
   }
 
