@@ -111,9 +111,7 @@ export class Route {
     if (typeof controller == 'function') {
       let response = await controller(req)
       if (response instanceof View) {
-        if (response.response.statusCode != 200) {
-          res.sendStatus(response.response.statusCode)
-        } else {
+        if (res.statusCode == 200) {
           let trans = new Translation(req.locale || 'en')
           // Url helpers
           // response.data['url'] = url
