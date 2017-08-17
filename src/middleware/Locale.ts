@@ -1,9 +1,8 @@
 import { Response, NextFunction } from 'express'
 import { SpikitRequest } from '../interfaces'
 import { App } from '../core'
-import { Middleware } from '.'
 
-export class Locale extends Middleware {
+export class Locale {
 
   public static handle(req: SpikitRequest, res: Response, next: NextFunction) {
     // If no locale is set, set a default

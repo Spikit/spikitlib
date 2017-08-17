@@ -1,3 +1,3 @@
 export * from './Locale'
 export * from './Auth'
-export * from './Middleware'
+// export * from './Middleware'
