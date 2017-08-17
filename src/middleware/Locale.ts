@@ -5,7 +5,7 @@ import { Middleware } from '.'
 
 export class Locale extends Middleware {
 
-  public handle(req: SpikitRequest, res: Response, next: NextFunction) {
+  public static handle(req: SpikitRequest, res: Response, next: NextFunction) {
     // If no locale is set, set a default
     let isSetPath = req.path.match(/\/locale\/(.+)/)
     if (isSetPath && isSetPath[1]) {
