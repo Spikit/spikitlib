@@ -96,10 +96,14 @@ export class Route {
     return this
   }
 
-  public static middleware<T extends Middleware>(...middleware: MiddlewareType<T>[]) {
-    middleware.forEach(m => {
-      let mw = new m;
-      App.express.route(this.lastRoute).all(mw.handle.bind(mw))
+  public static middleware(...routeMiddleware: string[]) {
+    routeMiddleware.forEach(m => {
+      let mw = new App.kernel.routeMiddleware[m] as Middleware;
+      if (mw) {
+        App.express.route(this.lastRoute).all(mw.handle.bind(mw))
+      } else {
+        throw new Error(`Middleware "${m}" could not be found`)
+      }
     })
     return this
   }
@@ -203,7 +207,7 @@ export class RouteGroup extends Route {
     return Route.group(options, callback)
   }
 
-  public middleware<T extends Middleware>(...middleware: MiddlewareType<T>[]) {
-    return Route.middleware(...middleware)
+  public middleware(...routeMiddleware: string[]) {
+    return Route.middleware(...routeMiddleware)
   }
 }

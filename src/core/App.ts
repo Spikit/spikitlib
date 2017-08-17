@@ -8,7 +8,7 @@ import * as compression from 'compression'
 import * as path from 'path'
 import * as glob from 'glob'
 
-import { AppOptions, AppServerOptions } from '../interfaces'
+import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
 
 export class App {
 
@@ -33,6 +33,10 @@ export class App {
 
   public static get projectRoot(): string {
     return this._projectRoot
+  }
+
+  public static get kernel(): AppKernel {
+    return this._options.kernel
   }
 
   public static run(projectRoot: string, appRoot: string) {

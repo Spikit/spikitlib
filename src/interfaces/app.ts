@@ -28,6 +28,7 @@ export interface SpikitRequestHandler {
 export interface AppKernel {
   middleware: MiddlewareType<Middleware>[]
   middlewareGroups: any[]
+  routeMiddleware: any
 }
 
 export interface AppOptions {
