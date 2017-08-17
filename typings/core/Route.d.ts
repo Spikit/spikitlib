@@ -1,6 +1,5 @@
 /// <reference types="express" />
 import { Response as ExpressResponse, NextFunction } from 'express';
-import { Middleware } from '../middleware';
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces';
 export declare class Route {
     protected static _routeNames: {
@@ -23,7 +22,6 @@ export declare class Route {
     static patch(routePath: string, controller: RouteController | string): typeof Route;
     static all(routePath: string, controller: RouteController | string): typeof Route;
     static routeName(name: string): void;
-    static middleware(...middleware: Middleware[]): void;
     private static _runController(req, res, controller);
     private static _runRoute(controller, req, res);
     private static _getPath(routePath);

@@ -6,9 +6,13 @@ export declare class App {
     private static _server;
     private static _options;
     static host: string;
+    private static _appRoot;
+    private static _projectRoot;
     static readonly express: Express;
     static readonly options: AppOptions;
-    static run(): void;
+    static readonly appRoot: string;
+    static readonly projectRoot: string;
+    static run(projectRoot: string, appRoot: string): void;
     static init(options: AppOptions): void;
     static set(setting: string, value: any): void;
     static use(...handlers: RequestHandler[]): void;

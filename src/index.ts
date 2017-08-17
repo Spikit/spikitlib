@@ -6,4 +6,4 @@ export { view, response, Route as route } from './core'
 // Export Middleware
 export * from './middleware'
 
-export const run = function () { App.run() }
+export const run = function (projectRoot: string, appRoot: string) { App.run(projectRoot, appRoot) }
