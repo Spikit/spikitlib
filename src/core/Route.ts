@@ -7,6 +7,10 @@ import { Strings, Urls, Translation } from '../helpers'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 import { Middleware } from '../middleware/Middleware'
 
+interface MiddlewareType<T extends Middleware> {
+  new(): T;
+}
+
 export class Route {
 
   // private static routes: RouteGroup[] = []
@@ -95,9 +99,10 @@ export class Route {
     return this
   }
 
-  public static middleware(...middleware: Middleware[]) {
+  public static middleware<T extends Middleware>(...middleware: MiddlewareType<T>[]) {
     middleware.forEach(m => {
-      App.express.route(this.lastRoute).all(m.handle)
+      let mw = new m;
+      App.express.route(this.lastRoute).all(mw.handle.bind(mw))
     })
     return this
   }
@@ -201,7 +206,7 @@ export class RouteGroup extends Route {
     return Route.group(options, callback)
   }
 
-  public middleware(...middleware: Middleware[]) {
+  public middleware<T extends Middleware>(...middleware: MiddlewareType<T>[]) {
     return Route.middleware(...middleware)
   }
 }
