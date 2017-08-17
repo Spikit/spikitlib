@@ -1,8 +1,9 @@
 import { Response, NextFunction } from 'express'
 import { SpikitRequest } from '../interfaces'
+import { Middleware } from './Middleware'
 
-export class Auth {
-  public static handle(req: SpikitRequest, res: Response, next: NextFunction) {
+export class Auth extends Middleware {
+  public handle(req: SpikitRequest, res: Response, next: NextFunction) {
     if (req.session) {
       next()
     } else {
