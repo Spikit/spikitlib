@@ -111,21 +111,25 @@ export class Route {
     if (typeof controller == 'function') {
       let response = await controller(req)
       if (response instanceof View) {
-        let trans = new Translation(req.locale || 'en')
-        // Url helpers
-        // response.data['url'] = url
-        response.data['route'] = Urls.route
-        response.data['url'] = Urls.url
-        // String helpers
-        response.data['slug'] = Strings.slug
-        response.data['trans'] = trans.get.bind(trans)
-        // Path helpers
-        response.data['path'] = path
-        // Other data
-        response.data['session'] = req.session
-        response.data['params'] = req.params
-        response.data['body'] = req.body
-        res.render(response.path, response.data)
+        if (response.response.statusCode != 200) {
+          res.sendStatus(response.response.statusCode)
+        } else {
+          let trans = new Translation(req.locale || 'en')
+          // Url helpers
+          // response.data['url'] = url
+          response.data['route'] = Urls.route
+          response.data['url'] = Urls.url
+          // String helpers
+          response.data['slug'] = Strings.slug
+          response.data['trans'] = trans.get.bind(trans)
+          // Path helpers
+          response.data['path'] = path
+          // Other data
+          response.data['session'] = req.session
+          response.data['params'] = req.params
+          response.data['body'] = req.body
+          res.render(response.path, response.data)
+        }
       } else if (response instanceof Response) {
         res.sendStatus(response.statusCode)
         for (let h in response.headers) {
