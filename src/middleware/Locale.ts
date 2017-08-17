@@ -1,12 +1,11 @@
-import { Request, Response, NextFunction } from 'express'
-import * as sessions from 'express-session'
-
-import { App } from '../core'
+import { Response, NextFunction } from 'express'
 import { SpikitRequest } from '../interfaces'
+import { App } from '../core'
+import { Middleware } from '.'
 
-export class Locale {
+export class Locale extends Middleware {
 
-  public static handle(req: SpikitRequest, res: Response, next: NextFunction) {
+  public handle(req: SpikitRequest, res: Response, next: NextFunction) {
     // If no locale is set, set a default
     let isSetPath = req.path.match(/\/locale\/(.+)/)
     if (isSetPath && isSetPath[1]) {
