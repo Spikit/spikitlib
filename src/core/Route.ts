@@ -129,7 +129,7 @@ export class Route {
           res.render(response.path, response.data)
         }
       } else if (response instanceof Response) {
-        res.sendStatus(response.statusCode)
+        res.status(response.statusCode)
         for (let h in response.headers) {
           res.setHeader(h, response.headers[h])
         }
