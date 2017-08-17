@@ -107,21 +107,6 @@ export class Route {
     return this
   }
 
-  public static middleware(...routeMiddleware: string[]) {
-    let router = express.Router()
-    routeMiddleware.forEach(m => {
-      let mw = new App.kernel.routeMiddleware[m] as Middleware;
-      if (mw) {
-        router.use(mw.handle.bind(mw))
-        App.express.use(this.lastRoute, router)
-        // App.express.route(this.lastRoute).all(mw.handle.bind(mw))
-      } else {
-        throw new Error(`Middleware "${m}" could not be found`)
-      }
-    })
-    return this
-  }
-
   private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController) {
     if (typeof controller == 'function') {
       let response = await controller(req)
@@ -142,6 +127,7 @@ export class Route {
         response.data['body'] = req.body
         res.render(response.path, response.data)
       } else if (response instanceof Response) {
+        res.sendStatus(response.statusCode)
         for (let h in response.headers) {
           res.setHeader(h, response.headers[h])
         }
@@ -249,9 +235,5 @@ export class RouteGroup extends Route {
 
   public group(options: RouteGroupOptions, callback: (route: RouteGroup) => void) {
     return Route.group(options, callback)
-  }
-
-  public middleware(...routeMiddleware: string[]) {
-    return Route.middleware(...routeMiddleware)
   }
 }
