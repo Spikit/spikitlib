@@ -2,11 +2,18 @@ export class Response {
 
   private _headers: any = {}
   private _body: any
+  private _statusCode: number
   public get body() { return this._body }
   public get headers() { return this._headers }
+  public get statusCode() { return this._statusCode || 200 }
 
   public constructor(body?: any) {
     this._body = body
+  }
+
+  public status(code: number) {
+    this._statusCode = code
+    return this
   }
 
   public toType(contentType: string) {
