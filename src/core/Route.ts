@@ -1,4 +1,4 @@
-import { Request as ExpressRequest, RequestHandler, Response as ExpressResponse, NextFunction } from 'express'
+import { Router, Request as ExpressRequest, RequestHandler, Response as ExpressResponse, NextFunction } from 'express'
 import * as path from 'path'
 import * as url from 'url'
 import * as express from 'express'
@@ -43,9 +43,19 @@ export class Route {
 
   public static get(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.express.get(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    let router = new SpikitRouter(this.lastRoute)
+    router.get(async (req: SpikitRequest, res: ExpressResponse) => {
       await Route._runRoute(controller, req, res)
     })
+    App.express.use(router.use)
+    // let router = express.Router()
+    // router.route(this.lastRoute)
+    //   .get(async function (req: SpikitRequest, res: ExpressResponse) {
+    //     await Route._runRoute(controller, req, res)
+    //   })
+    // App.express.get(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    //   await Route._runRoute(controller, req, res)
+    // })
     return this
   }
 
@@ -178,6 +188,23 @@ export class Route {
     return ctrl[ctrlClass].prototype[ctrlMethod]
   }
 
+}
+
+export class SpikitRouter {
+  private _path: string = ''
+  private _router: Router
+  public constructor(path: string) {
+    this._path = path
+    this._router = express.Router()
+  }
+
+  public get use(): Router {
+    return this._router
+  }
+
+  public get(controller: RequestHandler) {
+    this._router.get(this._path, controller)
+  }
 }
 
 export class RouteGroup extends Route {
