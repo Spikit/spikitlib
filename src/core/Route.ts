@@ -202,8 +202,21 @@ export class SpikitRouter {
     return this._router
   }
 
+  public middleware(...routeMiddleware: string[]) {
+    routeMiddleware.forEach(m => {
+      let mw = new App.kernel.routeMiddleware[m] as Middleware;
+      if (mw) {
+        this._router.use(mw.handle.bind(mw))
+      } else {
+        throw new Error(`Middleware "${m}" could not be found`)
+      }
+    })
+    return this
+  }
+
   public get(controller: RequestHandler) {
     this._router.get(this._path, controller)
+    return this
   }
 }
 
