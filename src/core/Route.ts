@@ -56,7 +56,7 @@ export class Route {
     // App.express.get(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
     //   await Route._runRoute(controller, req, res)
     // })
-    return this
+    return router
   }
 
   public static post(routePath: string, controller: RouteController | string) {
