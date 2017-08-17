@@ -4,7 +4,6 @@ import * as url from 'url'
 
 import { App, View, Response } from '.'
 import { Strings, Urls, Translation } from '../helpers'
-import { Middleware } from '../middleware'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 
 export class Route {
@@ -160,7 +159,7 @@ export class Route {
     let section = string.split('@')
     let ctrlPath = section[0].replace(/\./g, '/')
     let ctrlMethod = section[1]
-    let file = path.join(App.appRoot, '/http/controllers/', ctrlPath)
+    let file = path.join(global.appRoot, '/http/controllers/', ctrlPath)
     let ctrl = await require(file)
     let ctrlClass = path.parse(file).base
     return ctrl[ctrlClass].prototype[ctrlMethod]
