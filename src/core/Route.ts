@@ -1,6 +1,7 @@
 import { Request as ExpressRequest, RequestHandler, Response as ExpressResponse, NextFunction } from 'express'
 import * as path from 'path'
 import * as url from 'url'
+import * as express from 'express'
 
 import { App, View, Response } from '.'
 import { Strings, Urls, Translation } from '../helpers'
@@ -97,10 +98,13 @@ export class Route {
   }
 
   public static middleware(...routeMiddleware: string[]) {
+    let router = express.Router()
     routeMiddleware.forEach(m => {
       let mw = new App.kernel.routeMiddleware[m] as Middleware;
       if (mw) {
-        App.express.route(this.lastRoute).all(mw.handle.bind(mw))
+        router.use(mw.handle.bind(mw))
+        App.express.use(this.lastRoute, router)
+        // App.express.route(this.lastRoute).all(mw.handle.bind(mw))
       } else {
         throw new Error(`Middleware "${m}" could not be found`)
       }
