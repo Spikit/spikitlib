@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Express, RequestHandler, Router } from 'express'
+import { Express, RequestHandler } from 'express'
 import * as session from 'express-session'
 import * as sass from 'node-sass-middleware'
 import * as bodyParser from 'body-parser'
@@ -13,7 +13,6 @@ import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
 export class App {
 
   private static _express: Express
-  private static _router: Router
   private static _server: AppServerOptions
   private static _options: AppOptions
   public static host: string = ''
@@ -22,10 +21,6 @@ export class App {
 
   public static get express(): Express {
     return this._express
-  }
-
-  public static get router(): Router {
-    return this._router
   }
 
   public static get options(): AppOptions {
@@ -63,7 +58,6 @@ export class App {
   public static init(options: AppOptions) {
     this._options = options
     this._express = express()
-    this._router = express.Router()
     this._express.use(cookieParser())
     if (options.sass.enabled) {
       this._express.use(sass(options.sass))

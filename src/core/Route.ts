@@ -42,7 +42,7 @@ export class Route {
 
   public static get(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.router.get(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    App.express.get(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -50,7 +50,7 @@ export class Route {
 
   public static post(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.router.post(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    App.express.post(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -58,7 +58,7 @@ export class Route {
 
   public static put(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.router.put(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    App.express.put(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -66,7 +66,7 @@ export class Route {
 
   public static delete(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.router.delete(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    App.express.delete(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -74,7 +74,7 @@ export class Route {
 
   public static patch(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.router.patch(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    App.express.patch(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -82,7 +82,7 @@ export class Route {
 
   public static all(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
-    App.router.all(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    App.express.all(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
       await Route._runRoute(controller, req, res)
     })
     return this
@@ -100,7 +100,7 @@ export class Route {
     routeMiddleware.forEach(m => {
       let mw = new App.kernel.routeMiddleware[m] as Middleware;
       if (mw) {
-        App.router.route(this.lastRoute).all(mw.handle.bind(mw))
+        App.express.route(this.lastRoute).all(mw.handle.bind(mw))
       } else {
         throw new Error(`Middleware "${m}" could not be found`)
       }
