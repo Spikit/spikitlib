@@ -67,7 +67,7 @@ export class App {
     // Setup the applications middleware
     options.kernel.middleware.forEach(m => {
       let mw = new m
-      this._express.use(mw.handle);
+      this._express.use(mw.handle.bind(mw));
     })
     // Setup the view engine
     this._express.set('view engine', options.view.engine)
