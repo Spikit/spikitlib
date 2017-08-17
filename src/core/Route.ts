@@ -93,11 +93,11 @@ export class Route {
     })
   }
 
-  public static middleware(...middleware: Middleware[]) {
-    middleware.forEach(m => {
-      // m.handle()
-    })
-  }
+  // public static middleware(...middleware: Middleware[]) {
+  //   middleware.forEach(m => {
+  //     // m.handle()
+  //   })
+  // }
 
   private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController) {
     if (typeof controller == 'function') {
@@ -159,7 +159,7 @@ export class Route {
     let section = string.split('@')
     let ctrlPath = section[0].replace(/\./g, '/')
     let ctrlMethod = section[1]
-    let file = path.join(global.appRoot, '/http/controllers/', ctrlPath)
+    let file = path.join(App.appRoot, '/http/controllers/', ctrlPath)
     let ctrl = await require(file)
     let ctrlClass = path.parse(file).base
     return ctrl[ctrlClass].prototype[ctrlMethod]

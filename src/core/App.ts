@@ -16,6 +16,8 @@ export class App {
   private static _server: AppServerOptions
   private static _options: AppOptions
   public static host: string = ''
+  private static _appRoot: string = ''
+  private static _projectRoot: string = ''
 
   public static get express(): Express {
     return this._express
@@ -25,15 +27,25 @@ export class App {
     return this._options
   }
 
-  public static run() {
+  public static get appRoot(): string {
+    return this._appRoot
+  }
+
+  public static get projectRoot(): string {
+    return this._projectRoot
+  }
+
+  public static run(projectRoot: string, appRoot: string) {
+    this._appRoot = appRoot
+    this._projectRoot = projectRoot
     this.init({
-      app: require(path.join(global.appRoot, '/config/app')).default,
-      view: require(path.join(global.appRoot, '/config/view')).default,
-      server: require(path.join(global.appRoot, '/config/server')).default,
-      sass: require(path.join(global.appRoot, '/config/sass')).default,
-      kernel: require(path.join(global.appRoot, '/http/Kernel')).default
+      app: require(path.join(appRoot, '/config/app')).default,
+      view: require(path.join(appRoot, '/config/view')).default,
+      server: require(path.join(appRoot, '/config/server')).default,
+      sass: require(path.join(appRoot, '/config/sass')).default,
+      kernel: require(path.join(appRoot, '/http/Kernel')).default
     })
-    glob(path.join(global.appRoot, '/routes/**/*.js'), (err, files: string[]) => {
+    glob(path.join(appRoot, '/routes/**/*.js'), (err, files: string[]) => {
       files.forEach(file => require(file))
       this.start()
     })
