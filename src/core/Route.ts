@@ -5,11 +5,8 @@ import * as url from 'url'
 import { App, View, Response } from '.'
 import { Strings, Urls, Translation } from '../helpers'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
+import { MiddlewareType } from '../interfaces'
 import { Middleware } from '../middleware/Middleware'
-
-interface MiddlewareType<T extends Middleware> {
-  new(): T;
-}
 
 export class Route {
 
