@@ -174,7 +174,7 @@ export class SpikitRouter {
   private _path: string = ''
   private _router: Router
   private _controller: RequestHandler
-  private _middleware: string[]
+  private _middleware: string[] = []
 
   public constructor(path: string) {
     this._path = path
