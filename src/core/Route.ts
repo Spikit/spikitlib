@@ -191,6 +191,7 @@ export class SpikitRouter {
 
   public middleware(...routeMiddleware: string[]) {
     this._middleware = routeMiddleware
+    return this
   }
 
   private applyMiddleware() {
