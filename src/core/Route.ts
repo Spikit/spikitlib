@@ -103,23 +103,21 @@ export class Route {
     if (typeof controller == 'function') {
       let response = await controller(req)
       if (response instanceof View) {
-        if (res.statusCode == 200) {
-          let trans = new Translation(req.locale || 'en')
-          // Url helpers
-          // response.data['url'] = url
-          response.data['route'] = Urls.route
-          response.data['url'] = Urls.url
-          // String helpers
-          response.data['slug'] = Strings.slug
-          response.data['trans'] = trans.get.bind(trans)
-          // Path helpers
-          response.data['path'] = path
-          // Other data
-          response.data['session'] = req.session
-          response.data['params'] = req.params
-          response.data['body'] = req.body
-          res.render(response.path, response.data)
-        }
+        let trans = new Translation(req.locale || 'en')
+        // Url helpers
+        // response.data['url'] = url
+        response.data['route'] = Urls.route
+        response.data['url'] = Urls.url
+        // String helpers
+        response.data['slug'] = Strings.slug
+        response.data['trans'] = trans.get.bind(trans)
+        // Path helpers
+        response.data['path'] = path
+        // Other data
+        response.data['session'] = req.session
+        response.data['params'] = req.params
+        response.data['body'] = req.body
+        res.render(response.path, response.data)
       } else if (response instanceof Response) {
         res.status(response.statusCode)
         for (let h in response.headers) {
@@ -173,7 +171,7 @@ export class Route {
 export class SpikitRouter {
   private _path: string = ''
   private _router: Router
-  private _controller: RequestHandler
+  private _controllers: { controller: RequestHandler, type: string }[] = []
   private _middleware: string[] = []
 
   public constructor(path: string) {
@@ -184,7 +182,11 @@ export class SpikitRouter {
 
   public get use(): Router {
     this.applyMiddleware()
-    this._router.get(this._path, this._controller)
+    this._controllers.forEach(c => {
+      switch (c.type) {
+        case 'get': this._router.get(this._path, c.controller); break;
+      }
+    })
     return this._router
   }
 
@@ -205,7 +207,7 @@ export class SpikitRouter {
   }
 
   public get(controller: RequestHandler) {
-    this._controller = controller
+    this._controllers.push({ controller: controller, type: 'get' })
     return this
   }
 }
