@@ -176,16 +176,16 @@ export class SpikitRouter {
   public constructor(path: string) {
     this._path = path
     this._router = express.Router()
-    App.express.use(this._router)
   }
 
-  public get use(): Router {
+  public get end(): Router {
     this.applyMiddleware()
     this._controllers.forEach(c => {
       switch (c.type) {
         case 'get': this._router.get(this._path, c.controller); break;
       }
     })
+    App.express.use(this._router)
     return this._router
   }
 
