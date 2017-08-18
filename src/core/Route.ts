@@ -178,7 +178,7 @@ export class SpikitRouter {
     this._router = express.Router()
   }
 
-  public get end(): Router {
+  public end(): Router {
     this.applyMiddleware()
     this._controllers.forEach(c => {
       switch (c.type) {
