@@ -47,7 +47,6 @@ export class Route {
     router.get(async (req: SpikitRequest, res: ExpressResponse) => {
       await Route._runRoute(controller, req, res)
     })
-    App.express.use(router.use)
     // let router = express.Router()
     // router.route(this.lastRoute)
     //   .get(async function (req: SpikitRequest, res: ExpressResponse) {
@@ -184,6 +183,7 @@ export class SpikitRouter {
   public constructor(path: string) {
     this._path = path
     this._router = express.Router()
+    App.express.use(this._path, this._router)
   }
 
   public get use(): Router {
