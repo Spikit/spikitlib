@@ -48,14 +48,6 @@ export class Route {
       await Route._runRoute(controller, req, res)
       next()
     })
-    // let router = express.Router()
-    // router.route(this.lastRoute)
-    //   .get(async function (req: SpikitRequest, res: ExpressResponse) {
-    //     await Route._runRoute(controller, req, res)
-    //   })
-    // App.express.get(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
-    //   await Route._runRoute(controller, req, res)
-    // })
     return router
   }
 
@@ -181,6 +173,7 @@ export class Route {
 export class SpikitRouter {
   private _path: string = ''
   private _router: Router
+  private _controller: RequestHandler
   public constructor(path: string) {
     this._path = path
     this._router = express.Router()
@@ -188,6 +181,7 @@ export class SpikitRouter {
   }
 
   public get use(): Router {
+    this._router.get(this._path, this._controller)
     return this._router
   }
 
@@ -204,7 +198,8 @@ export class SpikitRouter {
   }
 
   public get(controller: RequestHandler) {
-    this._router.get(this._path, controller)
+    this._controller = controller
+    // this._router.get(this._path, controller)
     return this
   }
 }
