@@ -47,7 +47,7 @@ export class Route {
     router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
-    App.express.use(this.lastRoute, router.use)
+    App.express.use(router.use)
     return router
   }
 
