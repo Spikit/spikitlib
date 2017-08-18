@@ -9,7 +9,8 @@ export class Ajax extends Middleware {
     if (req.xhr) {
       next()
     } else {
-      return response().status(400)
+      res.status(400)
+      // return response().status(400)
     }
   }
 }
