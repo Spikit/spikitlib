@@ -44,8 +44,9 @@ export class Route {
   public static get(routePath: string, controller: RouteController | string) {
     this.lastRoute = this._getPath(routePath)
     let router = new SpikitRouter(this.lastRoute)
-    router.get(async (req: SpikitRequest, res: ExpressResponse) => {
+    router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
+      next()
     })
     // let router = express.Router()
     // router.route(this.lastRoute)
