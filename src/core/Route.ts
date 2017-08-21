@@ -22,6 +22,11 @@ export class Route {
   protected static currentMiddleware: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[] = []
   protected static currentPrefix: string = ''
   protected static lastRoute: string = ''
+  protected static _router: SpikitRouter | null = null
+
+  public static get router(): SpikitRouter | null {
+    return this._router
+  }
 
   public static group(options: RouteGroupOptions, callback: (route: RouteGroup) => void) {
     let currentGroup = this.currentGroup
@@ -42,6 +47,7 @@ export class Route {
   }
 
   public static get(routePath: string, controller: RouteController | string) {
+    Route.applyRoute()
     this.lastRoute = this._getPath(routePath)
     let router = new SpikitRouter(this.lastRoute)
     router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
@@ -96,6 +102,13 @@ export class Route {
       route: this.lastRoute
     })
     return this
+  }
+
+  public static applyRoute() {
+    if (this.router) {
+      this.router.apply()
+      this._router = null
+    }
   }
 
   private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController) {
