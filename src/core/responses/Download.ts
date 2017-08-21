@@ -15,6 +15,7 @@ export class Download extends Response {
   public constructor(filename: string, downloadPath: string, ) {
     super()
     this._downloadPath = downloadPath
+    this._filename = filename
   }
 }
 
