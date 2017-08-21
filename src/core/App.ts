@@ -9,6 +9,7 @@ import * as path from 'path'
 import * as glob from 'glob'
 
 import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
+import { Route } from './Route'
 
 export class App {
 
@@ -53,6 +54,7 @@ export class App {
       files.forEach(file => require(file))
       this.start()
     })
+    Route.applyRoute()
   }
 
   public static init(options: AppOptions) {

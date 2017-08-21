@@ -1,5 +1,9 @@
 /// <reference types="express" />
 import { RequestHandler } from 'express';
+import { Middleware } from '../middleware/Middleware';
+export interface MiddlewareType<T extends Middleware> {
+    new (): T;
+}
 export interface AppMainOptions {
     locale: string;
     locales: {}[];
@@ -17,8 +21,9 @@ export interface SpikitRequestHandler {
     handle: RequestHandler;
 }
 export interface AppKernel {
-    middleware: SpikitRequestHandler[];
+    middleware: MiddlewareType<Middleware>[];
     middlewareGroups: any[];
+    routeMiddleware: any;
 }
 export interface AppOptions {
     app: AppMainOptions;

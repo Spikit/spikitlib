@@ -1,6 +1,7 @@
 /// <reference types="express" />
 import { Response, NextFunction } from 'express';
 import { SpikitRequest } from '../interfaces';
-export declare class Ajax {
-    static handle(req: SpikitRequest, res: Response, next: NextFunction): void;
+import { Middleware } from './Middleware';
+export declare class Ajax extends Middleware {
+    handle(req: SpikitRequest, res: Response, next: NextFunction): void;
 }
