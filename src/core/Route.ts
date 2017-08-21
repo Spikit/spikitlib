@@ -114,7 +114,7 @@ export class Route {
     }
   }
 
-  private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController) {
+  private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController): Promise<Response | void> {
     if (typeof controller == 'function') {
       let response = await controller(req)
       if (response instanceof Response) {
