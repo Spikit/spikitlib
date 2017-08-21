@@ -136,13 +136,13 @@ export class Route {
         response.data['params'] = req.params
         response.data['body'] = req.body
         res.render(response.path, response.data)
+      } else if (response instanceof Download) {
+        res.download(response.downloadPath, response.filename)
       } else if (response instanceof Response) {
         for (let h in response.headers) {
           res.setHeader(h, response.headers[h])
         }
         res.send(response.body || '')
-      } else if (response instanceof Download) {
-        res.download(response.downloadPath, response.filename)
       } else {
         res.sendStatus(200)
       }
