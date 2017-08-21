@@ -60,25 +60,49 @@ export class App {
   public static init(options: AppOptions) {
     this._options = options
     this._express = express()
+
+    // Parse cookies
     this._express.use(cookieParser())
+
+    // Enable sass if it is enabled:
+    // https://github.com/Spikit/spikit/blob/master/src/config/sass.ts
     if (options.sass.enabled) {
       this._express.use(sass(options.sass))
     }
+
+    // Enable the body parser for forms
+    this._express.use(bodyParser.urlencoded({ extended: false }))
+    // Enable the body parser for json
     this._express.use(bodyParser.json())
+
+    // Enable compression to compress responses
     this._express.use(compression())
+
     // Setup the static routes
+    // https://github.com/Spikit/spikit/blob/master/src/config/app.ts
     options.app.static.forEach(file => {
       this._express.use(express.static(file))
     })
+
     // Setup the applications middleware
+    // This is the middleware is run on every request
+    // To modify the middleware view the Kernel file:
+    // https://github.com/Spikit/spikit/blob/master/src/http/Kernel.ts
     options.kernel.middleware.forEach(m => {
       let mw = new m
       this._express.use(mw.handle.bind(mw));
     })
+
     // Setup the view engine
     this._express.set('view engine', options.view.engine)
     this._express.set('views', options.view.paths)
+
+    // Setup the server options
+    // https://github.com/Spikit/spikit/blob/master/src/config/server.ts
     this._server = options.server
+
+    // Set the basedir for the views
+    // https://github.com/Spikit/spikit/blob/master/src/config/view.ts
     this._express.locals.basedir = options.view.basedir
   }
 

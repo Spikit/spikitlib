@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { View } from '../core'
+import { View } from '../core/responses'
 import { SpikitRequest } from '.'
 
 export interface RouteGroupOptions {
