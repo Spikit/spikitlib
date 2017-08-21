@@ -49,11 +49,11 @@ export class Route {
   public static get(routePath: string, controller: RouteController | string) {
     Route.applyRoute()
     this.lastRoute = this._getPath(routePath)
-    let router = new SpikitRouter(this.lastRoute)
-    router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
+    this._router = new SpikitRouter(this.lastRoute)
+    this._router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
-    return router
+    return this._router
   }
 
   public static post(routePath: string, controller: RouteController | string) {
