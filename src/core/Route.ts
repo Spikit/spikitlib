@@ -57,43 +57,53 @@ export class Route {
   }
 
   public static post(routePath: string, controller: RouteController | string) {
+    Route.applyRoute()
     this.lastRoute = this._getPath(routePath)
-    App.express.post(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    this._router = new SpikitRouter(this.lastRoute)
+    this._router.post(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
-    return this
+    return this._router
   }
 
   public static put(routePath: string, controller: RouteController | string) {
+    Route.applyRoute()
     this.lastRoute = this._getPath(routePath)
-    App.express.put(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    this._router = new SpikitRouter(this.lastRoute)
+    this._router.put(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
-    return this
+    return this._router
   }
 
   public static delete(routePath: string, controller: RouteController | string) {
+    Route.applyRoute()
     this.lastRoute = this._getPath(routePath)
-    App.express.delete(this.lastRoute, this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    this._router = new SpikitRouter(this.lastRoute)
+    this._router.delete(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
-    return this
+    return this._router
   }
 
   public static patch(routePath: string, controller: RouteController | string) {
+    Route.applyRoute()
     this.lastRoute = this._getPath(routePath)
-    App.express.patch(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    this._router = new SpikitRouter(this.lastRoute)
+    this._router.patch(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
-    return this
+    return this._router
   }
 
   public static all(routePath: string, controller: RouteController | string) {
+    Route.applyRoute()
     this.lastRoute = this._getPath(routePath)
-    App.express.all(this._getPath(routePath), this.currentMiddleware, async function (req: SpikitRequest, res: ExpressResponse) {
+    this._router = new SpikitRouter(this.lastRoute)
+    this._router.all(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
-    return this
+    return this._router
   }
 
   public static routeName(name: string) {
@@ -196,6 +206,11 @@ export class SpikitRouter {
     this._controllers.forEach(c => {
       switch (c.type) {
         case 'get': this._router.get(this._path, c.controller); break;
+        case 'post': this._router.post(this._path, c.controller); break;
+        case 'put': this._router.put(this._path, c.controller); break;
+        case 'delete': this._router.delete(this._path, c.controller); break;
+        case 'patch': this._router.patch(this._path, c.controller); break;
+        case 'all': this._router.all(this._path, c.controller); break;
       }
     })
     App.express.use(this._router)
@@ -221,6 +236,26 @@ export class SpikitRouter {
 
   public get(controller: RequestHandler) {
     this._controllers.push({ controller: controller, type: 'get' })
+    return this
+  }
+  public post(controller: RequestHandler) {
+    this._controllers.push({ controller: controller, type: 'post' })
+    return this
+  }
+  public put(controller: RequestHandler) {
+    this._controllers.push({ controller: controller, type: 'put' })
+    return this
+  }
+  public delete(controller: RequestHandler) {
+    this._controllers.push({ controller: controller, type: 'delete' })
+    return this
+  }
+  public patch(controller: RequestHandler) {
+    this._controllers.push({ controller: controller, type: 'patch' })
+    return this
+  }
+  public all(controller: RequestHandler) {
+    this._controllers.push({ controller: controller, type: 'all' })
     return this
   }
 }
