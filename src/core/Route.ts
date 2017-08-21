@@ -106,14 +106,6 @@ export class Route {
     return this._router
   }
 
-  public static routeName(name: string) {
-    this._routeNames.push({
-      name: name,
-      route: this.lastRoute
-    })
-    return this
-  }
-
   public static applyRoute() {
     if (this.router) {
       this.router.apply()
@@ -230,6 +222,14 @@ export class SpikitRouter {
       } catch (e) {
         throw new Error(`Middleware "${m}" could not be found`)
       }
+    })
+    return this
+  }
+
+  public name(name: string) {
+    Route.routeNames.push({
+      name: name,
+      route: this._path
     })
     return this
   }
