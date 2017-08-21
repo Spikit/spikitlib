@@ -3,7 +3,8 @@ import * as path from 'path'
 import * as url from 'url'
 import * as express from 'express'
 
-import { App, View, Response } from '.'
+import { App } from '.'
+import { View, Response, Download } from './responses'
 import { Strings, Urls, Translation } from '../helpers'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 import { MiddlewareType } from '../interfaces'
@@ -116,6 +117,9 @@ export class Route {
   private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController) {
     if (typeof controller == 'function') {
       let response = await controller(req)
+      if (response instanceof Response) {
+        res.status(response.statusCode)
+      }
       if (response instanceof View) {
         let trans = new Translation(req.locale || 'en')
         // Url helpers
@@ -133,11 +137,12 @@ export class Route {
         response.data['body'] = req.body
         res.render(response.path, response.data)
       } else if (response instanceof Response) {
-        res.status(response.statusCode)
         for (let h in response.headers) {
           res.setHeader(h, response.headers[h])
         }
         res.send(response.body || '')
+      } else if (response instanceof Download) {
+        res.download(response.downloadPath, response.filename)
       } else {
         res.sendStatus(200)
       }
