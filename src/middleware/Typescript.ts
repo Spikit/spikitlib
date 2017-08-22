@@ -29,9 +29,13 @@ export class Typescript extends Middleware {
           let statJs: fs.Stats = null
           if (typeof check == 'string') {
             check = path.resolve(configFile, check)
-            statJs = fs.statSync(check)
+            try {
+              statJs = fs.statSync(check)
+            } catch (e) {
+              console.log(e.message)
+            }
           }
-          if (statJs && statTs && statTs.mtime > statJs.mtime) {
+          if (!statJs || (statTs && statJs && statTs.mtime > statJs.mtime)) {
             cp.execSync(`${tscPath} -p "${configFile}"`)
           }
         })
