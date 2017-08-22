@@ -75,7 +75,7 @@ export class App {
     // Enable sass if it is enabled:
     // https://github.com/Spikit/spikit/blob/master/src/config/typescript.ts
     if (options.typescript.enabled) {
-      this._express.use('typescript', options.typescript.tsc)
+      this._express.use('typescript', tsc(options.typescript.tsc))
     }
 
     // Enable the body parser for forms
