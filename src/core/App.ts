@@ -7,10 +7,10 @@ import * as cookieParser from 'cookie-parser'
 import * as compression from 'compression'
 import * as path from 'path'
 import * as glob from 'glob'
-let tsc = require('typescript-middleware')
 
 import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
 import { Route } from './Route'
+import { Typescript } from '../middleware'
 
 export class App {
 
@@ -69,13 +69,14 @@ export class App {
     // Enable sass if it is enabled:
     // https://github.com/Spikit/spikit/blob/master/src/config/sass.ts
     if (options.sass.enabled) {
-      this._express.use(sass(options.sass))
+      this._express.use(sass(options.sass.sass))
     }
 
     // Enable sass if it is enabled:
     // https://github.com/Spikit/spikit/blob/master/src/config/typescript.ts
     if (options.typescript.enabled) {
-      this._express.use('typescript', tsc(options.typescript.tsc))
+      let tsc = new Typescript
+      this._express.use(tsc.handle.bind(tsc))
     }
 
     // Enable the body parser for forms
