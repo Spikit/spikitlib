@@ -27,7 +27,7 @@ export class Typescript extends Middleware {
           let cfg = JSON.parse(fs.readFileSync(configFile).toString())
           let check = cfg.compilerOptions.outDir || cfg.compilerOptions.outFile || null
           let tsDate = await this.getDirMtime(cfgDir)
-          let jsDate = await this.getDirMtime(check)
+          let jsDate = await this.getDirMtime(path.resolve(cfgDir, check))
           if (!jsDate || (tsDate && jsDate && tsDate > jsDate)) {
             cp.execSync(`${tscPath} -p "${configFile}"`)
           }
