@@ -43,6 +43,6 @@ export class Typescript extends Middleware {
   }
 
   private getTscPath(): string {
-    return path.join(App.projectRoot, 'node_modules/.bin/tsc').replace('\\', '/')
+    return path.join(App.projectRoot, 'node_modules/.bin/tsc').replace(/\\/g, '/')
   }
 }
