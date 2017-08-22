@@ -25,7 +25,7 @@ export class Typescript extends Middleware {
         files.forEach(configFile => {
           // let cfg = this.rebuildConfig(configFile)
           // console.log(cfg)
-          cp.execSync(`${tscPath} -p '${configFile}'`)
+          cp.execSync(`'${tscPath}' -p '${configFile}'`)
         })
       })
     })
