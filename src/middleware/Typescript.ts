@@ -14,6 +14,7 @@ export class Typescript extends Middleware {
     roots.forEach(async root => {
       let a = await this.compileTypeScript(root)
     })
+    next()
   }
 
   private compileTypeScript(root: string) {
@@ -22,9 +23,9 @@ export class Typescript extends Middleware {
         if (err) { throw new Error(err.message) }
         let tscPath = this.getTscPath()
         files.forEach(configFile => {
-          let cfg = this.rebuildConfig(configFile)
-          console.log(cfg)
-          // cp.execSync(`${tscPath} -p '${configFile}'`)
+          // let cfg = this.rebuildConfig(configFile)
+          // console.log(cfg)
+          cp.execSync(`${tscPath} -p '${configFile}'`)
         })
       })
     })
@@ -35,7 +36,7 @@ export class Typescript extends Middleware {
     cfg.compilerOptions.outDir = path.join(App.projectRoot, 'public/js')
     let opt: string[] = []
     for (let key in cfg.compilerOptions) {
-      let value = cfg[key]
+      let value = cfg.compilerOptions[key]
       opt.push(`--${key}=${value}`)
     }
     return opt.join(' ')
