@@ -52,9 +52,9 @@ export class Typescript extends Middleware {
   }
 
   private getDirMtime(path: string): Promise<Date | null> {
-    let lastMod: Date = new Date(1970, 1)
-    try {
-      return new Promise<Date>(resolve => {
+    return new Promise<Date | null>(resolve => {
+      try {
+        let lastMod: Date = new Date(1970, 1)
         let stat = fs.statSync(path)
         if (stat.isFile()) {
           return resolve(stat.mtime)
@@ -69,10 +69,10 @@ export class Typescript extends Middleware {
           })
         }
         resolve(lastMod)
-      })
-    } catch (e) {
-      return Promise.resolve(null)
-    }
+      } catch (e) {
+        resolve(null)
+      }
+    })
   }
 
   private rebuildConfig(configFile: string) {
