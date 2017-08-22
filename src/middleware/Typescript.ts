@@ -22,25 +22,57 @@ export class Typescript extends Middleware {
       glob(`${root}/**/tsconfig.json`, (err, files) => {
         if (err) { throw new Error(err.message) }
         let tscPath = this.getTscPath()
-        files.forEach(configFile => {
-          let statTs = fs.statSync(path.parse(configFile).dir)
+        files.forEach(async configFile => {
+          let cfgDir = path.parse(configFile).dir
           let cfg = JSON.parse(fs.readFileSync(configFile).toString())
           let check = cfg.compilerOptions.outDir || cfg.compilerOptions.outFile || null
-          let statJs: fs.Stats = null
-          if (typeof check == 'string') {
-            check = path.resolve(configFile, check)
-            try {
-              statJs = fs.statSync(check)
-            } catch (e) {
-              console.log(e.message)
-            }
-          }
-          if (!statJs || (statTs && statJs && statTs.mtime > statJs.mtime)) {
+          let tsDate = await this.getDirMtime(cfgDir)
+          let jsDate = await this.getDirMtime(check)
+          if (!jsDate || (tsDate && jsDate && tsDate > jsDate)) {
             cp.execSync(`${tscPath} -p "${configFile}"`)
           }
+          // let statTs = fs.statSync(cfgDir)
+          // let cfg = JSON.parse(fs.readFileSync(configFile).toString())
+          // let check = cfg.compilerOptions.outDir || cfg.compilerOptions.outFile || null
+          // let statJs: fs.Stats = null
+          // if (typeof check == 'string') {
+          //   check = path.resolve(cfgDir, check)
+          //   try {
+          //     statJs = fs.statSync(check)
+          //   } catch (e) {
+          //     console.log(e.message)
+          //   }
+          // }
+          // if (!statJs || (statTs && statJs && statTs.mtime > statJs.mtime)) {
+          //   cp.execSync(`${tscPath} -p "${configFile}"`)
+          // }
         })
       })
     })
+  }
+
+  private getDirMtime(path: string): Promise<Date> {
+    try {
+      let stat = fs.statSync(path)
+      return new Promise(resolve => {
+        let lastMod: Date = new Date(1970, 1)
+        if (stat.isFile()) {
+          return resolve(stat.mtime)
+        } else if (stat.isDirectory()) {
+          glob(path + '/**/*.ts', (err, files) => {
+            files.forEach(file => {
+              let stat = fs.statSync(file)
+              if (stat.mtime > lastMod) {
+                lastMod = stat.mtime
+              }
+            })
+          })
+        }
+        resolve(lastMod)
+      })
+    } catch (e) {
+      return Promise.resolve(null)
+    }
   }
 
   private rebuildConfig(configFile: string) {
