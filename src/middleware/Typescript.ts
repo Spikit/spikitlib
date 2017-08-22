@@ -25,7 +25,7 @@ export class Typescript extends Middleware {
         files.forEach(configFile => {
           // let cfg = this.rebuildConfig(configFile)
           // console.log(cfg)
-          cp.execSync(`'${tscPath}' -p '${configFile}'`)
+          cp.execSync(`${tscPath} -p '${configFile}'`)
         })
       })
     })
@@ -43,8 +43,6 @@ export class Typescript extends Middleware {
   }
 
   private getTscPath(): string {
-    let tscPath = ''
-    tscPath = path.join(App.projectRoot, 'node_modules/.bin/tsc')
-    return tscPath
+    return path.join(App.projectRoot, 'node_modules/.bin/tsc').replace('\\', '/')
   }
 }
