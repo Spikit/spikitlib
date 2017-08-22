@@ -23,7 +23,8 @@
         "glob": "^7.1.2",
         "mongoose": "^4.11.7",
         "node-sass-middleware": "^0.11.0",
-        "pug": "^2.0.0-rc.3"
+        "pug": "^2.0.0-rc.3",
+        "typescript-middleware": "^0.6.10"
     },
     "devDependencies": {
         "@types/compression": "0.0.33",
