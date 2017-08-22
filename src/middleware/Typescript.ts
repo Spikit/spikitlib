@@ -23,9 +23,16 @@ export class Typescript extends Middleware {
         if (err) { throw new Error(err.message) }
         let tscPath = this.getTscPath()
         files.forEach(configFile => {
-          // let cfg = this.rebuildConfig(configFile)
-          // console.log(cfg)
-          cp.execSync(`${tscPath} -p '${configFile}'`)
+          let statTs = fs.statSync(path.parse(configFile).dir)
+          let cfg = JSON.parse(fs.readFileSync(configFile).toString())
+          let check = cfg.compilerOptions.outDir || cfg.compilerOptions.outFile || null
+          let statJs: fs.Stats = null
+          if (typeof check == 'string') {
+            statJs = fs.statSync(check)
+          }
+          if (statJs && statTs && statTs.mtime > statJs.mtime) {
+            cp.execSync(`${tscPath} -p "${configFile}"`)
+          }
         })
       })
     })
