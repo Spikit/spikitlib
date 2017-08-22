@@ -36,5 +36,6 @@ export interface AppOptions {
   view: AppViewOptions
   server: AppServerOptions
   sass: any
+  typescript: { enabled: boolean, tsc: any }
   kernel: AppKernel
 }
