@@ -28,6 +28,7 @@ export class Typescript extends Middleware {
           let check = cfg.compilerOptions.outDir || cfg.compilerOptions.outFile || null
           let statJs: fs.Stats = null
           if (typeof check == 'string') {
+            check = path.resolve(configFile, check)
             statJs = fs.statSync(check)
           }
           if (statJs && statTs && statTs.mtime > statJs.mtime) {
