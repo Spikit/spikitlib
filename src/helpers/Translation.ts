@@ -1,14 +1,19 @@
 import * as path from 'path'
 import { App } from '../core'
+import { Helper } from './Helper'
 
-export class Translation {
+export class Translation extends Helper {
+
+  public name = 'trans'
+
   private locale: string = 'en'
 
   public constructor(locale: string) {
+    super()
     this.locale = locale
   }
 
-  public get(key: string, fallback: string = '') {
+  public helper(key: string, fallback: string = '') {
     let parts = key.split('.')
     let transKey = parts.pop()
     try {
@@ -17,7 +22,7 @@ export class Translation {
         return file[transKey] || fallback
       }
     } catch (e) {
-      throw new
+      throw new Error(e.message)
     }
     return fallback
   }

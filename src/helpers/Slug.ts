@@ -1,5 +1,8 @@
-export class Strings {
-  public static slug(str: string) {
+import { Helper } from './Helper'
+
+export class Slug extends Helper {
+  public name = 'slug'
+  public helper(str: string) {
     return str
       .trim()
       .toLowerCase()

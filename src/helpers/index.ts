@@ -1,3 +1,4 @@
-export * from './Strings'
+export * from './Slug'
 export * from './Translation'
-export * from './Urls'
+export * from './Url'
+export * from './Route'

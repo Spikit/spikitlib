@@ -1,5 +1,5 @@
 import { Response as ExpressResponse, NextFunction } from 'express'
-import { Response } from '../core/responses'
+import { Response, View } from '../core/responses'
 import { SpikitRequest } from '.'
 
 export interface RouteGroupOptions {
@@ -9,5 +9,5 @@ export interface RouteGroupOptions {
 }
 
 export interface RouteController {
-  (req: SpikitRequest): Response | void
+  (req: SpikitRequest): Response | View | void
 }
