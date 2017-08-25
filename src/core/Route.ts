@@ -125,8 +125,11 @@ export class Route {
       if (response instanceof View) {
         glob(__dirname + '/../helpers/help/**/*.js', (err, files) => {
           files.forEach(file => {
-            let helper = require(file)
+            let helper = require(file).default
             let h = new helper() as Helper
+            if (typeof h.init == 'function') {
+              h.init(req)
+            }
             if (response instanceof View) {
               response.data[h.name] = h.helper.bind(h)
             }
