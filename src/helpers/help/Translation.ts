@@ -13,7 +13,7 @@ export default class Translation extends Helper {
     this.locale = req.locale
   }
 
-  public helper(key: string, fallback: string = '') {
+  public help(key: string, fallback: string = '') {
     let parts = key.split('.')
     let transKey = parts.pop()
     try {

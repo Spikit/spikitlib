@@ -17,7 +17,7 @@ export class Helpers extends Middleware {
           if (typeof h.init == 'function') {
             h.init(req)
           }
-          App.express.locals[h.name] = h.helper.bind(h)
+          App.express.locals[h.name] = h.help.bind(h)
         }
       })
       next()

@@ -4,5 +4,5 @@ export interface Helper {
 }
 export abstract class Helper {
   public abstract name = ''
-  public abstract helper(...args: any[]): any
+  public abstract help(...args: any[]): any
 }

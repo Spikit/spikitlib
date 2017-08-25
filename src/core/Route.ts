@@ -8,6 +8,7 @@ import { App } from '.'
 import { View, Response, Download } from './responses'
 // import { Slug, Url, Route, Translation } from '../helpers'
 import { Helper } from '../helpers/Helper'
+import { Helpers } from '../middleware'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 import { MiddlewareType } from '../interfaces'
 import { Middleware } from '../middleware/Middleware'
@@ -123,6 +124,10 @@ export class Route {
         res.status(response.statusCode)
       }
       if (response instanceof View) {
+        // Load the helpers
+        let helpers = new Helpers
+        App.express.use(helpers.handle.bind(helpers))
+
         response.data['session'] = req.session
         response.data['params'] = req.params
         response.data['body'] = req.body

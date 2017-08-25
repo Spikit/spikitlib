@@ -12,7 +12,7 @@ export default class Url extends Helper {
     this.currentRoute = req.route.path
   }
 
-  public helper(urlPath: string) {
+  public help(urlPath: string) {
     if (urlPath.startsWith('/')) {
       return url.resolve(App.host, urlPath)
     }

@@ -17,7 +17,7 @@ export default class Route extends Helper {
     this.currentRoute = req.route.path
   }
 
-  public helper(name: string, ...args: any[]) {
+  public help(name: string, ...args: any[]) {
     let route = ''
     for (let i of routeCore.routeNames) {
       if (i.name == name) {
@@ -36,7 +36,7 @@ export default class Route extends Helper {
     route = this.replaceRouteParams(route, args)
     let u = new Url
     u.init(this.req)
-    u.helper(route)
+    u.help(route)
     return u
   }
 
