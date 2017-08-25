@@ -3,7 +3,7 @@ import { Helper } from '../Helper'
 import * as url from 'url'
 import * as path from 'path'
 
-export class Url extends Helper {
+export default class Url extends Helper {
   public name = 'url'
   public currentRoute = ''
 
