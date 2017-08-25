@@ -1,6 +1,6 @@
 import * as path from 'path'
-import { App } from '../core'
-import { Helper } from './Helper'
+import { App } from '../../core'
+import { Helper } from '../Helper'
 
 export class Translation extends Helper {
 
