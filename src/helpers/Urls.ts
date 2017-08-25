@@ -1,15 +1,24 @@
 import { Route } from '../core/Route'
 import { App } from '../core/App'
 import * as url from 'url'
+import * as path from 'path'
 const regex = /:.\w+/g;
 
 export class Urls {
+  public currentRoute = ''
 
-  public static url(path: string) {
-    return url.resolve(App.host, path)
+  public constructor(currentRoute) {
+    this.currentRoute = currentRoute
   }
 
-  public static route(name: string, ...args: any[]) {
+  public url(urlPath: string) {
+    if (urlPath.startsWith('/')) {
+      return url.resolve(App.host, urlPath)
+    }
+    return url.resolve(App.host, path.join(this.currentRoute, urlPath))
+  }
+
+  public route(name: string, ...args: any[]) {
     let route = ''
     for (let i of Route.routeNames) {
       if (i.name == name) {
@@ -26,7 +35,7 @@ export class Urls {
     }
 
     route = Urls.replaceRouteParams(route, args)
-    return Urls.url(route)
+    return this.url(route)
   }
 
   private static replaceRouteParams(route: string, args: any[]) {
