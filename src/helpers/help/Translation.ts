@@ -22,7 +22,7 @@ export default class Translation extends Helper {
         return file[transKey] || fallback
       }
     } catch (e) {
-      throw new Error(e.message)
+      return fallback
     }
     return fallback
   }
