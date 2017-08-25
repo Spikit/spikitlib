@@ -1,4 +1,4 @@
-import { Helper } from './Helper'
+import { Helper } from '../Helper'
 
 export class Slug extends Helper {
   public name = 'slug'

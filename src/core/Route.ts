@@ -123,7 +123,7 @@ export class Route {
         res.status(response.statusCode)
       }
       if (response instanceof View) {
-        glob(__dirname + '../helpers/**/*.js', (err, files) => {
+        glob(__dirname + '/../helpers/help/**/*.js', (err, files) => {
           files.forEach(file => {
             let helper = require(file)
             let h = new helper() as Helper
