@@ -10,7 +10,7 @@ import * as glob from 'glob'
 
 import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
 import { Route } from './Route'
-import { Typescript } from '../middleware'
+import { Typescript, Helpers } from '../middleware'
 
 export class App {
 
@@ -86,6 +86,10 @@ export class App {
 
     // Enable compression to compress responses
     this._express.use(compression())
+
+    // Load the helpers
+    let helpers = new Helpers
+    this._express.use(helpers.handle.bind(helpers))
 
     // Setup the static routes
     // https://github.com/Spikit/spikit/blob/master/src/config/app.ts
