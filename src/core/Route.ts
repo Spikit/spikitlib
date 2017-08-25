@@ -8,7 +8,6 @@ import { App } from '.'
 import { View, Response, Download } from './responses'
 // import { Slug, Url, Route, Translation } from '../helpers'
 import { Helper } from '../helpers/Helper'
-import { Helpers } from '../middleware'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 import { MiddlewareType } from '../interfaces'
 import { Middleware } from '../middleware/Middleware'
@@ -124,15 +123,27 @@ export class Route {
         res.status(response.statusCode)
       }
       if (response instanceof View) {
-        // Load the helpers
-        let helpers = new Helpers
-        App.express.use(helpers.handle.bind(helpers))
-
-        response.data['session'] = req.session
-        response.data['params'] = req.params
-        response.data['body'] = req.body
-        response.data['env'] = process.env
-        res.render(response.path, response.data)
+        glob(__dirname + '/../helpers/help/**/*.js', (err, files) => {
+          files.forEach(file => {
+            let helper = require(file).default
+            let h = new helper()
+            if (h instanceof Helper) {
+              if (typeof h.init == 'function') {
+                h.init(req)
+              }
+              if (response instanceof View) {
+                response.data[h.name] = h.help.bind(h)
+              }
+            }
+          })
+          if (response instanceof View) {
+            response.data['session'] = req.session
+            response.data['params'] = req.params
+            response.data['body'] = req.body
+            response.data['env'] = process.env
+            res.render(response.path, response.data)
+          }
+        })
       } else if (response instanceof Download) {
         res.download(response.downloadPath, response.filename)
       } else if (response instanceof Response) {
