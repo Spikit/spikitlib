@@ -122,10 +122,11 @@ export class Route {
       }
       if (response instanceof View) {
         let trans = new Translation(req.locale || 'en')
+        let urls = new Urls(req.route.path)
         // Url helpers
         // response.data['url'] = url
-        response.data['route'] = Urls.route
-        response.data['url'] = Urls.url
+        response.data['route'] = urls.route.bind(urls)
+        response.data['url'] = urls.url.bind(urls)
         // String helpers
         response.data['slug'] = Strings.slug
         response.data['trans'] = trans.get.bind(trans)

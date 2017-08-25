@@ -11,9 +11,13 @@ export class Translation {
   public get(key: string, fallback: string = '') {
     let parts = key.split('.')
     let transKey = parts.pop()
-    let file = require(path.join(App.projectRoot, 'resources/lang', this.locale, parts.join('/')) + '.json')
-    if (file && transKey) {
-      return file[transKey] || fallback
+    try {
+      let file = require(path.join(App.projectRoot, 'resources/lang', this.locale, parts.join('/')) + '.json')
+      if (file && transKey) {
+        return file[transKey] || fallback
+      }
+    } catch (e) {
+      throw new
     }
     return fallback
   }
