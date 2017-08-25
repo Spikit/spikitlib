@@ -2,6 +2,7 @@ import { Route as routeCore } from '../../core/Route'
 import { App } from '../../core/App'
 import Url from './Url'
 import { Helper } from '../Helper'
+import { SpikitRequest } from '../../interfaces'
 import * as url from 'url'
 import * as path from 'path'
 const regex = /:.\w+/g;
@@ -9,10 +10,11 @@ const regex = /:.\w+/g;
 export default class Route extends Helper {
   public name = 'route'
   public currentRoute = ''
+  public req: SpikitRequest
 
-  public constructor(currentRoute: string) {
-    super()
-    this.currentRoute = currentRoute
+  public init(req: SpikitRequest) {
+    this.req = req
+    this.currentRoute = req.route.path
   }
 
   public helper(name: string, ...args: any[]) {
@@ -32,7 +34,10 @@ export default class Route extends Helper {
     }
 
     route = this.replaceRouteParams(route, args)
-    return new Url(this.currentRoute).helper(route)
+    let u = new Url
+    u.init(this.req)
+    u.helper(route)
+    return u
   }
 
   private replaceRouteParams(route: string, args: any[]) {

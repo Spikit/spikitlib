@@ -1,6 +1,7 @@
 import * as path from 'path'
 import { App } from '../../core'
 import { Helper } from '../Helper'
+import { SpikitRequest } from '../../interfaces'
 
 export default class Translation extends Helper {
 
@@ -8,9 +9,8 @@ export default class Translation extends Helper {
 
   private locale: string = 'en'
 
-  public constructor(locale: string) {
-    super()
-    this.locale = locale
+  public init(req: SpikitRequest) {
+    this.locale = req.locale
   }
 
   public helper(key: string, fallback: string = '') {
