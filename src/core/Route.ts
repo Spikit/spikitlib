@@ -123,36 +123,11 @@ export class Route {
         res.status(response.statusCode)
       }
       if (response instanceof View) {
-        glob(__dirname + '/../helpers/help/**/*.js', (err, files) => {
-          files.forEach(file => {
-            let helper = require(file).default
-            let h = new helper() as Helper
-            if (typeof h.init == 'function') {
-              h.init(req)
-            }
-            if (response instanceof View) {
-              response.data[h.name] = h.helper.bind(h)
-            }
-          })
-          if (response instanceof View) {
-            response.data['session'] = req.session
-            response.data['params'] = req.params
-            response.data['body'] = req.body
-            response.data['env'] = process.env
-            res.render(response.path, response.data)
-          }
-        })
-        // let trans = new Translation(req.locale || 'en')
-        // let urls = new Urls(req.route.path)
-        // // Url helpers
-        // response.data['route'] = urls.route.bind(urls)
-        // response.data['url'] = urls.url.bind(urls)
-        // // String helpers
-        // response.data['slug'] = Strings.slug
-        // response.data['trans'] = trans.get.bind(trans)
-        // // Path helpers
-        // response.data['path'] = path
-        // Other data
+        response.data['session'] = req.session
+        response.data['params'] = req.params
+        response.data['body'] = req.body
+        response.data['env'] = process.env
+        res.render(response.path, response.data)
       } else if (response instanceof Download) {
         res.download(response.downloadPath, response.filename)
       } else if (response instanceof Response) {
