@@ -1,6 +1,6 @@
 import { Helper } from '../Helper'
 
-export class Slug extends Helper {
+export default class Slug extends Helper {
   public name = 'slug'
   public helper(str: string) {
     return str

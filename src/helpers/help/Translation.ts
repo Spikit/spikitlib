@@ -2,7 +2,7 @@ import * as path from 'path'
 import { App } from '../../core'
 import { Helper } from '../Helper'
 
-export class Translation extends Helper {
+export default class Translation extends Helper {
 
   public name = 'trans'
 
