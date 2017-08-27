@@ -169,7 +169,7 @@ export abstract class Route {
       controller = await Route._getController(controller)
       response = await Route._runController(req, res, controller)
     } catch (e) {
-      console.log(new Error().stack)
+      console.error(e.stack)
     }
     if (!response) { res.sendStatus(500) }
   }
