@@ -10,7 +10,7 @@ export declare abstract class Model<T extends Document> {
     protected abstract schema: Schema;
     static createSchema(definition: mongoose.SchemaDefinition, options?: mongoose.SchemaOptions): Schema;
     private _model;
-    protected readonly model: MongooseModel<T>;
+    protected model(): Promise<MongooseModel<T>>;
     constructor(connectionName?: string);
     private makeModel();
     private connect();

@@ -22,9 +22,9 @@ export abstract class Model<T extends Document> {
 
   private _model: MongooseModel<T>
 
-  protected get model(): MongooseModel<T> {
+  protected async model(): Promise<MongooseModel<T>> {
     if (!this._model) {
-      this.makeModel()
+      await this.makeModel()
     }
     return this._model
   }
@@ -36,7 +36,6 @@ export abstract class Model<T extends Document> {
         break
       }
     }
-    this.makeModel()
   }
 
   private async makeModel() {
@@ -73,8 +72,8 @@ export abstract class Model<T extends Document> {
 
 
   protected findOne(conditions: object): Promise<T | null> {
-    return new Promise<T | null>(resolve => {
-      this.model.findOne(conditions, (err, obj) => {
+    return new Promise<T | null>(async resolve => {
+      (await this.model()).findOne(conditions, (err, obj) => {
         if (err) {
           return resolve(null)
         }
