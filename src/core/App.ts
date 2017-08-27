@@ -115,7 +115,7 @@ export class App {
     // https://github.com/Spikit/spikit/blob/master/src/config/view.ts
     this._express.locals.basedir = options.view.basedir
 
-    this._connectToMogo
+    this._connectToMogo()
   }
 
   private static _connectToMogo() {
