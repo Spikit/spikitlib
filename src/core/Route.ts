@@ -163,9 +163,14 @@ export abstract class Route {
   }
 
   private static async _runRoute(controller: RouteController | string, req: SpikitRequest, res: ExpressResponse) {
-    App.host = `${req.protocol}://${req.get('host')}`
-    controller = await Route._getController(controller)
-    let response = await Route._runController(req, res, controller)
+    let response
+    try {
+      App.host = `${req.protocol}://${req.get('host')}`
+      controller = await Route._getController(controller)
+      response = await Route._runController(req, res, controller)
+    } catch (e) {
+      console.log(new Error().stack)
+    }
     if (!response) { res.sendStatus(500) }
   }
 
