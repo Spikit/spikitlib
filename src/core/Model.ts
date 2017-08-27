@@ -13,4 +13,8 @@ export abstract class Model {
   protected abstract name: string
   protected abstract schema: Schema
 
+  protected static createSchema(definition: mongoose.SchemaDefinition): Schema {
+    return new Schema(definition)
+  }
+
 }
