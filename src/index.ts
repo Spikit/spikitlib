@@ -5,6 +5,7 @@ export { Document, Schema } from 'mongoose'
 // Export Routes
 export { Route as route, Controller, Model, Password } from './core'
 export { view, response, download } from './core/responses'
+export { SpikitRequest as Request } from './interfaces'
 // Export Middleware
 import { Ajax, Auth, Locale } from './middleware'
 

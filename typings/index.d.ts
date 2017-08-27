@@ -1,6 +1,7 @@
 export { Document, Schema } from 'mongoose';
 export { Route as route, Controller, Model, Password } from './core';
 export { view, response, download } from './core/responses';
+export { SpikitRequest as Request } from './interfaces';
 import { Ajax, Auth, Locale } from './middleware';
 export declare const middleware: {
     ajax: typeof Ajax;
