@@ -1,5 +1,7 @@
 /// <reference types="express" />
+/// <reference types="express-session" />
 import { RequestHandler } from 'express';
+import { SessionOptions } from 'express-session';
 import { Middleware } from '../middleware/Middleware';
 export interface MiddlewareType<T extends Middleware> {
     new (): T;
@@ -31,6 +33,10 @@ export interface AppMongoConnection {
     port: number;
     collection: string;
 }
+export interface AppSession {
+    enabled: boolean;
+    session: SessionOptions;
+}
 export interface AppMongo {
     enabled: boolean;
     connection: AppMongoConnection;
@@ -49,4 +55,5 @@ export interface AppOptions {
     };
     kernel: AppKernel;
     mongo: AppMongo;
+    session: AppSession;
 }

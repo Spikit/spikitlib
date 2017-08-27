@@ -52,6 +52,7 @@ export class App {
       sass: require(path.join(appRoot, '/config/sass')).default,
       typescript: require(path.join(appRoot, '/config/typescript')).default,
       mongo: require(path.join(appRoot, '/config/mongo')).default,
+      session: require(path.join(appRoot, '/config/session')).default,
       kernel: require(path.join(appRoot, '/http/Kernel')).default
     })
     glob(path.join(appRoot, '/routes/**/*.js'), (err, files: string[]) => {
@@ -66,6 +67,12 @@ export class App {
     this._express = express()
     // Parse cookies
     this._express.use(cookieParser())
+
+    // Enable sessions if they are enabled:
+    // https://github.com/Spikit/spikit/blob/master/src/config/session.ts
+    if (options.session.enabled) {
+      this._express.use(session(options.session.session))
+    }
 
     // Enable sass if it is enabled:
     // https://github.com/Spikit/spikit/blob/master/src/config/sass.ts

@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express'
+import { SessionOptions } from 'express-session'
 import { Middleware } from '../middleware/Middleware'
 
 export interface MiddlewareType<T extends Middleware> {
@@ -38,6 +39,11 @@ export interface AppMongoConnection {
   collection: string
 }
 
+export interface AppSession {
+  enabled: boolean
+  session: SessionOptions
+}
+
 export interface AppMongo {
   enabled: boolean
   connection: AppMongoConnection
@@ -51,4 +57,5 @@ export interface AppOptions {
   typescript: { enabled: boolean, roots: string[] }
   kernel: AppKernel
   mongo: AppMongo
+  session: AppSession
 }
