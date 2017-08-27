@@ -2,10 +2,12 @@ import { Router, Request as ExpressRequest, RequestHandler, Response as ExpressR
 import * as path from 'path'
 import * as url from 'url'
 import * as express from 'express'
+import * as glob from 'glob'
 
 import { App } from '.'
 import { View, Response, Download } from './responses'
-import { Strings, Urls, Translation } from '../helpers'
+// import { Slug, Url, Route, Translation } from '../helpers'
+import { Helper } from '../helpers/Helper'
 import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces'
 import { MiddlewareType } from '../interfaces'
 import { Middleware } from '../middleware/Middleware'
@@ -114,28 +116,34 @@ export abstract class Route {
     }
   }
 
-  private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController): Promise<Response | void> {
+  private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController): Promise<Response | View | void> {
     if (typeof controller == 'function') {
       let response = await controller(req)
       if (response instanceof Response) {
         res.status(response.statusCode)
       }
       if (response instanceof View) {
-        let trans = new Translation(req.locale || 'en')
-        // Url helpers
-        // response.data['url'] = url
-        response.data['route'] = Urls.route
-        response.data['url'] = Urls.url
-        // String helpers
-        response.data['slug'] = Strings.slug
-        response.data['trans'] = trans.get.bind(trans)
-        // Path helpers
-        response.data['path'] = path
-        // Other data
-        response.data['session'] = req.session
-        response.data['params'] = req.params
-        response.data['body'] = req.body
-        res.render(response.path, response.data)
+        glob(__dirname + '/../helpers/help/**/*.js', (err, files) => {
+          files.forEach(file => {
+            let helper = require(file).default
+            let h = new helper()
+            if (h instanceof Helper) {
+              if (typeof h.init == 'function') {
+                h.init(req)
+              }
+              if (response instanceof View) {
+                response.data[h.name] = h.help.bind(h)
+              }
+            }
+          })
+          if (response instanceof View) {
+            response.data['session'] = req.session
+            response.data['params'] = req.params
+            response.data['body'] = req.body
+            response.data['env'] = process.env
+            res.render(response.path, response.data)
+          }
+        })
       } else if (response instanceof Download) {
         res.download(response.downloadPath, response.filename)
       } else if (response instanceof Response) {

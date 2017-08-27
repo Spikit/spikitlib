@@ -1,17 +1,25 @@
-import { Route } from '../core/Route'
-import { App } from '../core/App'
+import { Route as routeCore } from '../../core/Route'
+import { App } from '../../core/App'
+import Url from './Url'
+import { Helper } from '../Helper'
+import { SpikitRequest } from '../../interfaces'
 import * as url from 'url'
+import * as path from 'path'
 const regex = /:.\w+/g;
 
-export class Urls {
+export default class Route extends Helper {
+  public name = 'route'
+  public currentRoute = ''
+  public req: SpikitRequest
 
-  public static url(path: string) {
-    return url.resolve(App.host, path)
+  public init(req: SpikitRequest) {
+    this.req = req
+    this.currentRoute = req.route.path
   }
 
-  public static route(name: string, ...args: any[]) {
+  public help(name: string, ...args: any[]) {
     let route = ''
-    for (let i of Route.routeNames) {
+    for (let i of routeCore.routeNames) {
       if (i.name == name) {
         route = i.route
         break
@@ -25,11 +33,14 @@ export class Urls {
       throw new Error('Invalid argument count: route takes ' + params.length + ' arguments but ' + args.length + ' arguments given')
     }
 
-    route = Urls.replaceRouteParams(route, args)
-    return Urls.url(route)
+    route = this.replaceRouteParams(route, args)
+    let u = new Url
+    u.init(this.req)
+    u.help(route)
+    return u
   }
 
-  private static replaceRouteParams(route: string, args: any[]) {
+  private replaceRouteParams(route: string, args: any[]) {
     let m
     let newRoute = route
     let i = 0
