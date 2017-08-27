@@ -29,12 +29,11 @@ export abstract class Model<T extends Document> {
     }
   }
 
-  protected findOne(conditions: object): Promise<T | null> {
+  protected findOne(conditions: object): Promise<T> {
     return new Promise<T | null>(async resolve => {
       this.model.findOne(conditions, (err, obj) => {
         if (err) {
           console.error(new Error().stack)
-          return resolve(null)
         }
         resolve(obj)
       })
