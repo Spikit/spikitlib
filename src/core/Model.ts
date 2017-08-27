@@ -13,8 +13,8 @@ export abstract class Model {
   protected abstract name: string
   protected abstract schema: Schema
 
-  protected static createSchema(definition: mongoose.SchemaDefinition): Schema {
-    return new Schema(definition)
+  protected static createSchema(definition: mongoose.SchemaDefinition, options?: mongoose.SchemaOptions): Schema {
+    return new Schema(definition, options)
   }
 
 }
