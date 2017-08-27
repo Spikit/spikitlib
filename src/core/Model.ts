@@ -16,7 +16,7 @@ export abstract class Model<T extends Document> {
 
   private _model: MongooseModel<T>
 
-  public model(): MongooseModel<T> {
+  protected get model(): MongooseModel<T> {
     if (!this._model) {
       this.makeModel()
     }
