@@ -10,7 +10,7 @@ export abstract class Model<T extends Document> {
   protected abstract name: string
   protected abstract schema: Schema
 
-  protected static createSchema(definition: mongoose.SchemaDefinition, options?: mongoose.SchemaOptions): Schema {
+  public static createSchema(definition: mongoose.SchemaDefinition, options?: mongoose.SchemaOptions): Schema {
     return new Schema(definition, options)
   }
 
