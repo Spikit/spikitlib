@@ -2,7 +2,7 @@ import { App } from './core'
 import { AppOptions } from './interfaces'
 
 // Export Routes
-export { Route as route } from './core'
+export { Route as route, Controller, Model } from './core'
 export { view, response, download } from './core/responses'
 // Export Middleware
 import * as m from './middleware'

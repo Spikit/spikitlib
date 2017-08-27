@@ -30,7 +30,12 @@ export class Typescript extends Middleware {
           let tsDate = await this._getDirMtime(cfgDir)
           let jsDate = await this._getDirMtime(path.resolve(cfgDir, check))
           if (!jsDate || (tsDate && jsDate && tsDate > jsDate)) {
-            cp.execSync(`${tscPath} -p "${configFile}"`)
+            try {
+              cp.execSync(`${tscPath} -p "${configFile}"`)
+            } catch (e) {
+              console.log(e.stdout.toString())
+              console.log(e.stderr.toString())
+            }
           }
         })
         return resolve()

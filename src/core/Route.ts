@@ -10,7 +10,7 @@ import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces
 import { MiddlewareType } from '../interfaces'
 import { Middleware } from '../middleware/Middleware'
 
-export class Route {
+export abstract class Route {
 
   // private static routes: RouteGroup[] = []
   // private static groupId: number = 0
