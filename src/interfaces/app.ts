@@ -31,6 +31,18 @@ export interface AppKernel {
   routeMiddleware: any
 }
 
+export interface AppMongoConnection {
+  name: string
+  host: string
+  port: number
+  collection: string
+  default: boolean
+}
+
+export interface AppMongo {
+  enabled: boolean
+  connections: AppMongoConnection[]
+}
 export interface AppOptions {
   app: AppMainOptions
   view: AppViewOptions
@@ -38,4 +50,5 @@ export interface AppOptions {
   sass: { enabled: boolean, sass: any }
   typescript: { enabled: boolean, roots: string[] }
   kernel: AppKernel
+  mongo: AppMongo
 }

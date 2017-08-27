@@ -1,9 +1,14 @@
 import { Schema, Model as MongooseModel, Document, model } from 'mongoose'
 import * as mongoose from 'mongoose'
+import { App } from './App'
+import { AppMongoConnection } from '../interfaces'
+import { MongoError } from 'mongodb'
 
 declare type ObjectId = mongoose.Types.ObjectId
 
 export abstract class Model<T extends Document> {
+
+  private _connection: AppMongoConnection
 
   protected indexes: any
   protected abstract collection: string
@@ -23,8 +28,27 @@ export abstract class Model<T extends Document> {
     return this._model
   }
 
-  public constructor() {
+  public constructor(connectionName?: string) {
+    for (let conn of App.options.mongo.connections) {
+      if ((connectionName && conn.name == connectionName) || (!connectionName && conn.default)) {
+        this._connection = conn
+        break
+      }
+    }
+    this.connect()
     this.makeModel()
+  }
+
+  private connect() {
+    let mongoose = require('mongoose')
+    mongoose.Promise = global.Promise
+    if (this._connection) {
+      let connectionString = `mongodb://${this._connection.host}:${this._connection.port}/${this._connection.collection}`
+      mongoose.connect(connectionString, (err: MongoError) => {
+        if (err) console.log(new Error().stack)
+        else console.log(`Connected to the database: ${connectionString}`)
+      })
+    }
   }
 
   private makeModel() {

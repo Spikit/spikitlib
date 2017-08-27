@@ -2,6 +2,7 @@
 import { Schema, Model as MongooseModel, Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 export declare abstract class Model<T extends Document> {
+    private _connection;
     protected indexes: any;
     protected abstract collection: string;
     protected abstract name: string;
@@ -9,7 +10,8 @@ export declare abstract class Model<T extends Document> {
     static createSchema(definition: mongoose.SchemaDefinition, options?: mongoose.SchemaOptions): Schema;
     private _model;
     protected readonly model: MongooseModel<T>;
-    constructor();
+    constructor(connectionName?: string);
+    private connect();
     private makeModel();
     protected findOne(conditions: object): Promise<T | null>;
 }

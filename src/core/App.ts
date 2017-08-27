@@ -50,6 +50,7 @@ export class App {
       server: require(path.join(appRoot, '/config/server')).default,
       sass: require(path.join(appRoot, '/config/sass')).default,
       typescript: require(path.join(appRoot, '/config/typescript')).default,
+      mongo: require(path.join(appRoot, '/config/mongo')).default,
       kernel: require(path.join(appRoot, '/http/Kernel')).default
     })
     glob(path.join(appRoot, '/routes/**/*.js'), (err, files: string[]) => {
@@ -62,7 +63,6 @@ export class App {
   public static init(options: AppOptions) {
     this._options = options
     this._express = express()
-
     // Parse cookies
     this._express.use(cookieParser())
 
