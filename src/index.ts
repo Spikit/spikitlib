@@ -1,6 +1,6 @@
 import { App } from './core'
 import { AppOptions } from './interfaces'
-export { Document } from 'mongoose'
+export { Document, Schema } from 'mongoose'
 
 // Export Routes
 export { Route as route, Controller, Model } from './core'
