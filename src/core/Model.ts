@@ -7,7 +7,7 @@ declare type ObjectId = mongoose.Types.ObjectId
 
 export abstract class Model<T extends Document> {
 
-  private _model: MongooseModel<T>
+  private static _model: any
 
   protected indexes: any
   protected abstract collection: string
@@ -18,22 +18,20 @@ export abstract class Model<T extends Document> {
     return new Schema(definition, options)
   }
 
-  protected async model(): Promise<MongooseModel<T>> {
-    if (!this._model) {
-      await this.makeModel()
-    }
-    return this._model
+  protected get model(): MongooseModel<T> {
+    this.makeModel()
+    return Model._model
   }
 
-  private async makeModel() {
-    if (!this._model) {
-      this._model = model<T>(this.name, this.schema, this.collection)
+  private makeModel() {
+    if (!Model._model) {
+      Model._model = model<T>(this.name, this.schema, this.collection)
     }
   }
 
   protected findOne(conditions: object): Promise<T | null> {
     return new Promise<T | null>(async resolve => {
-      (await this.model()).findOne(conditions, (err, obj) => {
+      this.model.findOne(conditions, (err, obj) => {
         if (err) {
           return resolve(null)
         }
