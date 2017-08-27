@@ -26,7 +26,9 @@ export abstract class Model<T extends Document> {
   }
 
   private async makeModel() {
-    this._model = model<T>(this.name, this.schema, this.collection)
+    if (!this._model) {
+      this._model = model<T>(this.name, this.schema, this.collection)
+    }
   }
 
   protected findOne(conditions: object): Promise<T | null> {
