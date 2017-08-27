@@ -30,7 +30,7 @@ export abstract class Model<T extends Document> {
 
   public constructor(connectionName?: string) {
     for (let conn of App.options.mongo.connections) {
-      if ((connectionName && conn.name == connectionName) || (!connectionName && conn.default)) {
+      if ((connectionName && conn.name == connectionName) || (!connectionName && conn.isDefault)) {
         this._connection = conn
         break
       }

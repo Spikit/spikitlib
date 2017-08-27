@@ -36,13 +36,14 @@ export interface AppMongoConnection {
   host: string
   port: number
   collection: string
-  default: boolean
+  isDefault: boolean
 }
 
 export interface AppMongo {
   enabled: boolean
   connections: AppMongoConnection[]
 }
+
 export interface AppOptions {
   app: AppMainOptions
   view: AppViewOptions
