@@ -5,10 +5,10 @@ declare type ObjectId = mongoose.Types.ObjectId
 
 export abstract class Model<T extends Document> {
 
-  protected indexes: any
-  protected abstract collection: string
-  protected abstract name: string
-  protected abstract schema: Schema
+  protected readonly indexes: any
+  protected abstract readonly collection: string
+  protected abstract readonly name: string
+  protected abstract readonly schema: Schema
 
   public static createSchema(definition: mongoose.SchemaDefinition, options?: mongoose.SchemaOptions): Schema {
     return new Schema(definition, options)
