@@ -9,6 +9,7 @@ declare type ObjectId = mongoose.Types.ObjectId
 export abstract class Model<T extends Document> {
 
   private _connection: AppMongoConnection
+  private _mongoConnected: boolean = false
 
   protected indexes: any
   protected abstract collection: string
@@ -35,25 +36,34 @@ export abstract class Model<T extends Document> {
         break
       }
     }
-    this.connect()
     this.makeModel()
   }
 
-  private connect() {
-    let mongoose = require('mongoose')
-    mongoose.Promise = global.Promise
-    if (this._connection) {
-      let connectionString = `mongodb://${this._connection.host}:${this._connection.port}/${this._connection.collection}`
-      mongoose.connect(connectionString, (err: MongoError) => {
-        if (err) console.log(new Error().stack)
-        else console.log(`Connected to the database: ${connectionString}`)
-      })
-    }
-  }
-
-  private makeModel() {
+  private async makeModel() {
+    await this.connect()
     this._model = model<T>(this.name, this.schema, this.collection)
   }
+
+  private connect(): Promise<boolean> {
+    return new Promise(resolve => {
+      let mongoose = require('mongoose')
+      mongoose.Promise = global.Promise
+      if (this._connection) {
+        let connectionString = `mongodb://${this._connection.host}:${this._connection.port}/${this._connection.collection}`
+        mongoose.connect(connectionString, (err: MongoError) => {
+          if (err) {
+            console.log(new Error().stack)
+            resolve(false)
+          } else {
+            console.log(`Connected to the database: ${connectionString}`)
+            this._mongoConnected = true
+            resolve(true)
+          }
+        })
+      }
+    })
+  }
+
 
   protected findOne(conditions: object): Promise<T | null> {
     return new Promise<T | null>(resolve => {
