@@ -40,12 +40,18 @@ export abstract class Model<T extends Document> {
   }
 
   private async makeModel() {
-    await this.connect()
+    if (!this._mongoConnected) {
+      try {
+        await this.connect()
+      } catch (e) {
+        throw e
+      }
+    }
     this._model = model<T>(this.name, this.schema, this.collection)
   }
 
   private connect(): Promise<boolean> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let mongoose = require('mongoose')
       mongoose.Promise = global.Promise
       if (this._connection) {
@@ -53,7 +59,8 @@ export abstract class Model<T extends Document> {
         mongoose.connect(connectionString, (err: MongoError) => {
           if (err) {
             console.log(new Error().stack)
-            resolve(false)
+            this._mongoConnected = false
+            reject(err)
           } else {
             console.log(`Connected to the database: ${connectionString}`)
             this._mongoConnected = true
