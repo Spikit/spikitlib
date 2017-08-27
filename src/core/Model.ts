@@ -8,7 +8,6 @@ declare type ObjectId = mongoose.Types.ObjectId
 export abstract class Model<T extends Document> {
 
   private _model: MongooseModel<T>
-  private _connectionName?: string
 
   protected indexes: any
   protected abstract collection: string
@@ -19,7 +18,6 @@ export abstract class Model<T extends Document> {
     return new Schema(definition, options)
   }
 
-
   protected async model(): Promise<MongooseModel<T>> {
     if (!this._model) {
       await this.makeModel()
@@ -29,12 +27,6 @@ export abstract class Model<T extends Document> {
 
   private async makeModel() {
     this._model = model<T>(this.name, this.schema, this.collection)
-  }
-
-  private static connect(connectionName?: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-
-    })
   }
 
   protected findOne(conditions: object): Promise<T | null> {
