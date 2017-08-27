@@ -30,11 +30,10 @@ export interface AppMongoConnection {
     host: string;
     port: number;
     collection: string;
-    isDefault: boolean;
 }
 export interface AppMongo {
     enabled: boolean;
-    connections: AppMongoConnection[];
+    connection: AppMongoConnection;
 }
 export interface AppOptions {
     app: AppMainOptions;

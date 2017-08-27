@@ -7,6 +7,7 @@ import * as cookieParser from 'cookie-parser'
 import * as compression from 'compression'
 import * as path from 'path'
 import * as glob from 'glob'
+import { MongoError } from 'mongodb'
 
 import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
 import { Route } from './Route'
@@ -113,6 +114,24 @@ export class App {
     // Set the basedir for the views
     // https://github.com/Spikit/spikit/blob/master/src/config/view.ts
     this._express.locals.basedir = options.view.basedir
+
+    this._connectToMogo
+  }
+
+  private static _connectToMogo() {
+    if (this.options.mongo.enabled) {
+      let conn = this.options.mongo.connection
+      let mongoose = require('mongoose')
+      mongoose.Promise = global.Promise
+      let connectionString = `mongodb://${conn.host}:${conn.port}/${conn.collection}`
+      mongoose.connect(connectionString, (err: MongoError) => {
+        if (err) {
+          console.log(new Error().stack)
+        } else {
+          console.log(`Connected to the database: ${connectionString}`)
+        }
+      })
+    }
   }
 
   public static set(setting: string, value: any) {

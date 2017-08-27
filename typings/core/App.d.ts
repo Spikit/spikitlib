@@ -15,6 +15,7 @@ export declare class App {
     static readonly kernel: AppKernel;
     static run(projectRoot: string, appRoot: string): void;
     static init(options: AppOptions): void;
+    private static _connectToMogo();
     static set(setting: string, value: any): void;
     static use(...handlers: RequestHandler[]): void;
     static start(): void;
