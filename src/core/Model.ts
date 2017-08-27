@@ -31,4 +31,14 @@ export abstract class Model<T extends Document> {
     this._model = model<T>(this.name, this.schema, this.collection)
   }
 
+  protected findOne(conditions: object): Promise<T | null> {
+    return new Promise<T | null>(resolve => {
+      this.model.findOne(conditions, (err, obj) => {
+        if (err) {
+          return resolve(null)
+        }
+        resolve(obj)
+      })
+    })
+  }
 }
