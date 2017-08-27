@@ -1,9 +1,9 @@
 /// <reference types="express" />
-import { Response, NextFunction } from 'express';
-import { View } from '../core';
+import { Response as ExpressResponse, NextFunction } from 'express';
+import { Response, View } from '../core/responses';
 import { SpikitRequest } from '.';
 export interface RouteGroupOptions {
-    middleware?: ((req: SpikitRequest, res: Response, next: NextFunction) => void)[];
+    middleware?: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[];
     namespace?: string;
     prefix?: string;
 }

@@ -5,12 +5,12 @@ import { AppOptions } from './interfaces'
 export { Route as route, Controller, Model } from './core'
 export { view, response, download } from './core/responses'
 // Export Middleware
-import * as m from './middleware'
+import { Ajax, Auth, Locale } from './middleware'
 
 export const middleware = {
-  ajax: m.Ajax,
-  auth: m.Auth,
-  locale: m.Locale,
+  ajax: Ajax,
+  auth: Auth,
+  locale: Locale,
 }
 
 export const run = function (projectRoot: string, appRoot: string) { App.run(projectRoot, appRoot) }

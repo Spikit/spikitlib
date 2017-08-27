@@ -1,5 +1,5 @@
 import { Response } from './Response';
-export declare class View {
+export declare class View extends Response {
     protected _path: string;
     protected _data: any;
     protected _response: Response;
