@@ -33,6 +33,7 @@ export abstract class Model<T extends Document> {
     return new Promise<T | null>(async resolve => {
       this.model.findOne(conditions, (err, obj) => {
         if (err) {
+          console.error(new Error(err).stack)
           return resolve(null)
         }
         resolve(obj)
