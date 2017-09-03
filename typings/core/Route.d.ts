@@ -36,7 +36,7 @@ export declare class SpikitRouter {
     private _router;
     private _controllers;
     private _middleware;
-    constructor(path: string);
+    constructor(path: string, groupMiddleware: string[]);
     apply(): void;
     private applyMiddleware();
     name(name: string): this;

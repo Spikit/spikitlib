@@ -56,7 +56,7 @@ export abstract class Route {
   public static get(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
     this._lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this._lastRoute)
+    this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -66,7 +66,7 @@ export abstract class Route {
   public static post(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
     this._lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this._lastRoute)
+    this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.post(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -76,7 +76,7 @@ export abstract class Route {
   public static put(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
     this._lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this._lastRoute)
+    this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.put(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -86,7 +86,7 @@ export abstract class Route {
   public static delete(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
     this._lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this._lastRoute)
+    this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.delete(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -96,7 +96,7 @@ export abstract class Route {
   public static patch(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
     this._lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this._lastRoute)
+    this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.patch(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -106,7 +106,7 @@ export abstract class Route {
   public static all(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
     this._lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this._lastRoute)
+    this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.all(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -214,9 +214,10 @@ export class SpikitRouter {
   private _controllers: { controller: RequestHandler, type: string }[] = []
   private _middleware: string[] = []
 
-  public constructor(path: string) {
+  public constructor(path: string, groupMiddleware: string[]) {
     this._path = path
     this._router = express.Router()
+    groupMiddleware.forEach(m => this._middleware.push(m))
   }
 
   public apply() {
