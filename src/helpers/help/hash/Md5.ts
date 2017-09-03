@@ -1,5 +1,5 @@
 import { MD5 } from 'crypto-js'
-import { Helper } from '../Helper'
+import { Helper } from '../../Helper'
 
 export default class Md5 extends Helper {
   public name = 'md5'

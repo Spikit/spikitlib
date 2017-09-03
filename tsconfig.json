@@ -11,10 +11,7 @@
     "declarationDir": "typings",
     "removeComments": true
   },
-  "files": [
-    "src/index"
-  ],
   "include": [
-    "src/helpers/help/**/*"
+    "src/**/*.ts"
   ]
 }
