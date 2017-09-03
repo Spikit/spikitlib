@@ -10,12 +10,13 @@ export declare abstract class Route {
         name: string;
         route: string;
     }[];
-    protected static currentGroup: RouteGroup | null;
-    protected static currentMiddleware: string[];
-    protected static currentPrefix: string;
-    protected static lastRoute: string;
+    protected static _currentGroup: RouteGroup | null;
+    protected static _currentMiddleware: string[];
+    protected static _currentPrefix: string;
+    protected static _lastRoute: string;
     protected static _router: SpikitRouter | null;
     static readonly router: SpikitRouter | null;
+    static readonly currentMiddleware: string[];
     static group(options: RouteGroupOptions, callback: (route: RouteGroup) => void): typeof Route;
     static get(routePath: string, controller: RouteController | string): SpikitRouter;
     static post(routePath: string, controller: RouteController | string): SpikitRouter;

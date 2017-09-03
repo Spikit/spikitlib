@@ -21,39 +21,42 @@ export abstract class Route {
     return this._routeNames
   }
 
-  protected static currentGroup: RouteGroup | null = null
-  protected static currentMiddleware: string[] = []// ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[] = []
-  protected static currentPrefix: string = ''
-  protected static lastRoute: string = ''
+  protected static _currentGroup: RouteGroup | null = null
+  protected static _currentMiddleware: string[] = []// ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[] = []
+  protected static _currentPrefix: string = ''
+  protected static _lastRoute: string = ''
   protected static _router: SpikitRouter | null = null
 
   public static get router(): SpikitRouter | null {
     return this._router
   }
 
+  public static get currentMiddleware(): string[] {
+    return this._currentMiddleware
+  }
+
   public static group(options: RouteGroupOptions, callback: (route: RouteGroup) => void) {
-    let currentGroup = this.currentGroup
-    let currentPrefix = this.currentPrefix
-    let currentMiddleware = this.currentMiddleware
+    let currentGroup = this._currentGroup
+    let currentPrefix = this._currentPrefix
+    let currentMiddleware = this._currentMiddleware
     let routeGroup = new RouteGroup
     routeGroup.options = options
-    this.currentGroup = routeGroup
-    this.currentPrefix = path.join(this.currentPrefix, routeGroup.options.prefix || '').replace(/\\/g, '/')
-    console.log(this.currentMiddleware)
+    this._currentGroup = routeGroup
+    this._currentPrefix = path.join(this._currentPrefix, routeGroup.options.prefix || '').replace(/\\/g, '/')
     if (options.middleware) {
-      this.currentMiddleware = this.currentMiddleware.concat(options.middleware)
+      this._currentMiddleware = this._currentMiddleware.concat(options.middleware)
     }
     callback(routeGroup)
-    this.currentPrefix = currentPrefix
-    this.currentGroup = currentGroup
-    this.currentMiddleware = currentMiddleware
+    this._currentPrefix = currentPrefix
+    this._currentGroup = currentGroup
+    this._currentMiddleware = currentMiddleware
     return this
   }
 
   public static get(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
-    this.lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this.lastRoute)
+    this._lastRoute = this._getPath(routePath)
+    this._router = new SpikitRouter(this._lastRoute)
     this._router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -62,8 +65,8 @@ export abstract class Route {
 
   public static post(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
-    this.lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this.lastRoute)
+    this._lastRoute = this._getPath(routePath)
+    this._router = new SpikitRouter(this._lastRoute)
     this._router.post(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -72,8 +75,8 @@ export abstract class Route {
 
   public static put(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
-    this.lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this.lastRoute)
+    this._lastRoute = this._getPath(routePath)
+    this._router = new SpikitRouter(this._lastRoute)
     this._router.put(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -82,8 +85,8 @@ export abstract class Route {
 
   public static delete(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
-    this.lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this.lastRoute)
+    this._lastRoute = this._getPath(routePath)
+    this._router = new SpikitRouter(this._lastRoute)
     this._router.delete(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -92,8 +95,8 @@ export abstract class Route {
 
   public static patch(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
-    this.lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this.lastRoute)
+    this._lastRoute = this._getPath(routePath)
+    this._router = new SpikitRouter(this._lastRoute)
     this._router.patch(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -102,8 +105,8 @@ export abstract class Route {
 
   public static all(routePath: string, controller: RouteController | string) {
     Route.applyCurrentRoute()
-    this.lastRoute = this._getPath(routePath)
-    this._router = new SpikitRouter(this.lastRoute)
+    this._lastRoute = this._getPath(routePath)
+    this._router = new SpikitRouter(this._lastRoute)
     this._router.all(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
       await Route._runRoute(controller, req, res)
     })
@@ -180,8 +183,8 @@ export abstract class Route {
   }
 
   private static _getPath(routePath: string) {
-    if (Route.currentGroup) {
-      routePath = path.join('/', Route.currentPrefix || '', routePath).replace(/\\/g, '/')
+    if (Route._currentGroup) {
+      routePath = path.join('/', Route._currentPrefix || '', routePath).replace(/\\/g, '/')
     }
     return routePath
   }
@@ -233,11 +236,18 @@ export class SpikitRouter {
 
   private applyMiddleware(): RequestHandler[] {
     let handlers: RequestHandler[] = []
+    Route.currentMiddleware.forEach(m => {
+      try {
+        let mw = new App.kernel.routeMiddleware[m] as Middleware;
+        handlers.push(mw.handle.bind(mw))
+      } catch (e) {
+        throw new Error(`Middleware "${m}" could not be found`)
+      }
+    })
     this._middleware.forEach(m => {
       try {
         let mw = new App.kernel.routeMiddleware[m] as Middleware;
         handlers.push(mw.handle.bind(mw))
-        // this._router.use(mw.handle.bind(mw))
       } catch (e) {
         throw new Error(`Middleware "${m}" could not be found`)
       }
