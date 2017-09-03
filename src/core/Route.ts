@@ -228,7 +228,7 @@ export class SpikitRouter {
         case 'all': this._router.all(this._path, ...this.applyMiddleware(), c.controller); break;
       }
     })
-    App.express.use(this._path, this._router)
+    App.express.use('/', this._router)
   }
 
   private applyMiddleware(): RequestHandler[] {
