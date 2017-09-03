@@ -221,11 +221,11 @@ export class SpikitRouter {
     this._controllers.forEach(c => {
       switch (c.type) {
         case 'get': this._router.get(this._path, ...this.applyMiddleware(), c.controller); break;
-        case 'post': this._router.post(this._path, c.controller); break;
-        case 'put': this._router.put(this._path, c.controller); break;
-        case 'delete': this._router.delete(this._path, c.controller); break;
-        case 'patch': this._router.patch(this._path, c.controller); break;
-        case 'all': this._router.all(this._path, c.controller); break;
+        case 'post': this._router.post(this._path, ...this.applyMiddleware(), c.controller); break;
+        case 'put': this._router.put(this._path, ...this.applyMiddleware(), c.controller); break;
+        case 'delete': this._router.delete(this._path, ...this.applyMiddleware(), c.controller); break;
+        case 'patch': this._router.patch(this._path, ...this.applyMiddleware(), c.controller); break;
+        case 'all': this._router.all(this._path, ...this.applyMiddleware(), c.controller); break;
       }
     })
     App.express.use(this._path, this._router)
