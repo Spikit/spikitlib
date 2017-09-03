@@ -4,5 +4,5 @@ export default class Translation extends Helper {
     name: string;
     private locale;
     init(req: SpikitRequest): void;
-    help(key: string, fallback?: string): any;
+    help(key: string, fallback?: string): string;
 }

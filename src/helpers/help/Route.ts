@@ -17,7 +17,7 @@ export default class Route extends Helper {
     this.currentRoute = req.route.path
   }
 
-  public help(name: string, ...args: any[]) {
+  public help(name: string, ...args: any[]): string {
     let route = ''
     for (let i of routeCore.routeNames) {
       if (i.name == name) {

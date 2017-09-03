@@ -1,4 +1,3 @@
-import Url from './Url';
 import { Helper } from '../Helper';
 import { SpikitRequest } from '../../interfaces';
 export default class Route extends Helper {
@@ -6,6 +5,6 @@ export default class Route extends Helper {
     currentRoute: string;
     req: SpikitRequest;
     init(req: SpikitRequest): void;
-    help(name: string, ...args: any[]): Url;
+    help(name: string, ...args: any[]): string;
     private replaceRouteParams(route, args);
 }
