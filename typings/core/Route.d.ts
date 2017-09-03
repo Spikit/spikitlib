@@ -1,6 +1,6 @@
 /// <reference types="express" />
-import { Router, RequestHandler, Response as ExpressResponse, NextFunction } from 'express';
-import { SpikitRequest, RouteGroupOptions, RouteController } from '../interfaces';
+import { Router, RequestHandler } from 'express';
+import { RouteGroupOptions, RouteController } from '../interfaces';
 export declare abstract class Route {
     protected static _routeNames: {
         name: string;
@@ -11,7 +11,7 @@ export declare abstract class Route {
         route: string;
     }[];
     protected static currentGroup: RouteGroup | null;
-    protected static currentMiddleware: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[];
+    protected static currentMiddleware: string[];
     protected static currentPrefix: string;
     protected static lastRoute: string;
     protected static _router: SpikitRouter | null;

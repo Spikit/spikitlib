@@ -22,7 +22,7 @@ export abstract class Route {
   }
 
   protected static currentGroup: RouteGroup | null = null
-  protected static currentMiddleware: ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[] = []
+  protected static currentMiddleware: string[]// ((req: SpikitRequest, res: ExpressResponse, next: NextFunction) => void)[] = []
   protected static currentPrefix: string = ''
   protected static lastRoute: string = ''
   protected static _router: SpikitRouter | null = null
