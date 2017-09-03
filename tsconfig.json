@@ -12,7 +12,9 @@
     "removeComments": true
   },
   "files": [
-    "src/index",
-    "src/helpers/index.ts"
+    "src/index"
+  ],
+  "include": [
+    "src/helpers/help/**/*"
   ]
 }

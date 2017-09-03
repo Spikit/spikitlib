@@ -36,8 +36,7 @@ export default class Route extends Helper {
     route = this.replaceRouteParams(route, args)
     let u = new Url
     u.init(this.req)
-    u.help(route)
-    return u
+    return u.help(route)
   }
 
   private replaceRouteParams(route: string, args: any[]) {
