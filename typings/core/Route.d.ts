@@ -1,5 +1,5 @@
 /// <reference types="express" />
-import { Router, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 import { RouteGroupOptions, RouteController } from '../interfaces';
 export declare abstract class Route {
     protected static _routeNames: {
@@ -23,7 +23,7 @@ export declare abstract class Route {
     static delete(routePath: string, controller: RouteController | string): SpikitRouter;
     static patch(routePath: string, controller: RouteController | string): SpikitRouter;
     static all(routePath: string, controller: RouteController | string): SpikitRouter;
-    static applyRoute(): void;
+    static applyCurrentRoute(): void;
     private static _runController(req, res, controller);
     private static _runRoute(controller, req, res);
     private static _getPath(routePath);
@@ -36,7 +36,7 @@ export declare class SpikitRouter {
     private _controllers;
     private _middleware;
     constructor(path: string);
-    apply(): Router;
+    apply(): void;
     private applyMiddleware();
     name(name: string): this;
     middleware(...routeMiddleware: string[]): this;

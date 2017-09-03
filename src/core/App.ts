@@ -57,7 +57,7 @@ export class App {
     })
     glob(path.join(appRoot, '/routes/**/*.js'), (err, files: string[]) => {
       files.forEach(file => require(file))
-      Route.applyRoute()
+      Route.applyCurrentRoute()
       this.start()
     })
   }
