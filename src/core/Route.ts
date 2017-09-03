@@ -39,6 +39,7 @@ export abstract class Route {
     routeGroup.options = options
     this.currentGroup = routeGroup
     this.currentPrefix = path.join(this.currentPrefix, routeGroup.options.prefix || '').replace(/\\/g, '/')
+    console.log(this.currentMiddleware)
     if (options.middleware) {
       this.currentMiddleware = this.currentMiddleware.concat(options.middleware)
     }
@@ -147,12 +148,12 @@ export abstract class Route {
       } else if (response instanceof Download) {
         res.download(response.downloadPath, response.filename)
       } else if (response instanceof Response) {
-        for (let h in response.headers) {
-          res.setHeader(h, response.headers[h])
-        }
         if (response.redirection) {
           res.redirect(response.redirection)
         } else {
+          for (let h in response.headers) {
+            res.setHeader(h, response.headers[h])
+          }
           res.send(response.body || '')
         }
       } else {
@@ -227,13 +228,8 @@ export class SpikitRouter {
         case 'all': this._router.all(this._path, c.controller); break;
       }
     })
-    App.express.use(this._router)
+    App.express.use(this._path, this._router)
     return this._router
-  }
-
-  public middleware(...routeMiddleware: string[]) {
-    this._middleware = routeMiddleware
-    return this
   }
 
   private applyMiddleware() {
@@ -253,6 +249,11 @@ export class SpikitRouter {
       name: name,
       route: this._path
     })
+    return this
+  }
+
+  public middleware(...routeMiddleware: string[]) {
+    this._middleware = routeMiddleware
     return this
   }
 

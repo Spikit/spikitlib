@@ -10,7 +10,6 @@ export class Ajax extends Middleware {
       next()
     } else {
       res.sendStatus(400)
-      // return response().status(400)
     }
   }
 }
