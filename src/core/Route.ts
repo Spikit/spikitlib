@@ -150,7 +150,11 @@ export abstract class Route {
         for (let h in response.headers) {
           res.setHeader(h, response.headers[h])
         }
-        res.send(response.body || '')
+        if (response.redirection) {
+          res.redirect(response.redirection)
+        } else {
+          res.send(response.body || '')
+        }
       } else {
         res.sendStatus(200)
       }
