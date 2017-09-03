@@ -31,6 +31,7 @@ export class Response {
 
   public redirect(location: string) {
     this._redirection = location
+    return this
   }
 
 }

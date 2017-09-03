@@ -11,6 +11,6 @@ export declare class Response {
     status(code: number): this;
     toType(contentType: string): this;
     toJson(data?: any): this;
-    redirect(location: string): void;
+    redirect(location: string): this;
 }
 export declare const response: (body?: any) => Response;
