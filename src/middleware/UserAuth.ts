@@ -13,12 +13,12 @@ export class UserAuth extends Middleware {
 
   public handle(req: SpikitRequest, res: Response, next: NextFunction) {
     req.auth = new auth(req)
-    this._login(req, res, next)
+    this._login(req, res)
     this._logout(req, res, next)
     next()
   }
 
-  private _login(req: SpikitRequest, res: Response, next: NextFunction) {
+  private _login(req: SpikitRequest, res: Response) {
     let router = new SpikitRouter('/auth/login')
     router.post((async (req: SpikitRequest) => {
       let user = await new AuthModel()
@@ -32,9 +32,9 @@ export class UserAuth extends Middleware {
         }
       }
       if (req.xhr) {
-        res.send({ success: false })
+        return res.send({ success: false })
       } else {
-        res.redirect(this.loginRedirectFail)
+        return res.redirect(this.loginRedirectFail)
       }
     }).bind(router))
     router.apply()
