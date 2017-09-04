@@ -13,6 +13,6 @@ export class Auth {
   }
 
   public check() {
-    return this._request.session && this._request.session[this.authField]
+    return this._request.session && this._request.session.user
   }
 }
