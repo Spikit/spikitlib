@@ -3,7 +3,6 @@ import { SpikitRequest } from '../interfaces'
 import { Middleware } from './Middleware'
 import { Auth as auth } from '../core'
 import { SpikitRouter } from '../core/route/Router'
-
 import { Auth as AuthModel } from '../models'
 
 export class UserAuth extends Middleware {

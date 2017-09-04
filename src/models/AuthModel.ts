@@ -1,4 +1,6 @@
-import { Model, Document, Schema, Password } from '../'
+import { Document, Schema } from 'mongoose'
+import { Model } from '../core/Model'
+import { Password } from '../core/Password'
 
 export interface UserAuth extends Document {
   email: string

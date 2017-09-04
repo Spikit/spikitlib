@@ -1,5 +1,6 @@
 /// <reference types="mongoose" />
-import { Model, Document, Schema } from '../';
+import { Document, Schema } from 'mongoose';
+import { Model } from '../core/Model';
 export interface UserAuth extends Document {
     email: string;
     password: string;
