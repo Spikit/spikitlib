@@ -15,6 +15,7 @@ export class UserAuth extends Middleware {
     req.auth = new auth(req)
     this._login(req, res, next)
     this._logout(req, res, next)
+    next()
   }
 
   private _login(req: SpikitRequest, res: Response, next: NextFunction) {
