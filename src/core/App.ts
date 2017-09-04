@@ -10,7 +10,7 @@ import * as glob from 'glob'
 import { MongoError } from 'mongodb'
 
 import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
-import { Route } from './Route'
+import { Route } from './route/Route'
 import { Typescript } from '../middleware'
 
 export class App {

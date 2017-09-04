@@ -41,6 +41,7 @@ export interface AppMongoConnection {
 
 export interface AppSession {
   enabled: boolean
+  authField: string
   session: SessionOptions
 }
 

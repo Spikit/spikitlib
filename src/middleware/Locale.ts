@@ -7,7 +7,7 @@ export class Locale extends Middleware {
 
   public handle(req: SpikitRequest, res: Response, next: NextFunction) {
     // If no locale is set, set a default
-    let isSetPath = req.path.match(/\/locale\/(.+)/)
+    let isSetPath = req.path.match(/^\/locale\/(.+)/)
     if (isSetPath && isSetPath[1]) {
       req.locale = isSetPath[1]
       res.cookie('locale', req.locale)

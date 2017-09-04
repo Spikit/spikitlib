@@ -1,5 +1,4 @@
-import { Route as routeCore } from '../../core/Route'
-import { App } from '../../core/App'
+import { Route as routeCore, App } from '../../core'
 import Url from './Url'
 import { Helper } from '../Helper'
 import { SpikitRequest } from '../../interfaces'
