@@ -101,6 +101,13 @@ export class App {
       this._express.use(express.static(file))
     })
 
+    this._express.use((req: SpikitRequest, res, next: NextFunction) => {
+      req.input = function (key: string, fallback: any = '') {
+        return req.params[key] || req.body[key] || fallback
+      }
+      next()
+    })
+
     // Setup the applications middleware
     // This is the middleware is run on every request
     // To modify the middleware view the Kernel file:
@@ -108,13 +115,6 @@ export class App {
     options.kernel.middleware.forEach(m => {
       let mw = new m
       this._express.use(mw.handle.bind(mw));
-    })
-
-    this._express.use((req: SpikitRequest, res, next: NextFunction) => {
-      req.input = function (key: string, fallback: any = '') {
-        return req.params[key] || req.body[key] || fallback
-      }
-      next()
     })
 
     // Setup the view engine
