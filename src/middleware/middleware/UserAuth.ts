@@ -26,7 +26,7 @@ export class UserAuth extends Middleware {
   }
 
   private _register() {
-    let router = new SpikitRouter('/auth/register')
+    let router = new SpikitRouter('/auth/register/save')
     router.all((async (req: SpikitRequest, res: Response) => {
       let user = await new AuthModel().register(req)
       if (user) {
