@@ -11,10 +11,15 @@ export class UserAuth extends Middleware {
   public loginRedirectFail: string = '/auth/login'
   public logoutRedirect: string = '/'
 
+  private createdRoutes: boolean = false
+
   public handle(req: SpikitRequest, res: Response, next: NextFunction) {
     req.auth = new auth(req)
-    this._login(req, res)
-    this._logout(req, res, next)
+    if (!this.createdRoutes) {
+      this._login(req, res)
+      this._logout(req, res, next)
+      this.createdRoutes = true
+    }
     next()
   }
 

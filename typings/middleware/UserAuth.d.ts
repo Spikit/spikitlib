@@ -6,6 +6,7 @@ export declare class UserAuth extends Middleware {
     loginRedirectSuccess: string;
     loginRedirectFail: string;
     logoutRedirect: string;
+    private createdRoutes;
     handle(req: SpikitRequest, res: Response, next: NextFunction): void;
     private _login(req, res);
     private _logout(req, res, next);
