@@ -20,7 +20,7 @@ export abstract class Model<T extends Document> {
 
   protected get model(): MongooseModel<T> {
     this.makeModel()
-    return Model._model
+    return <MongooseModel<T>>Model._model
   }
 
   private makeModel() {
@@ -29,9 +29,32 @@ export abstract class Model<T extends Document> {
     }
   }
 
+
   protected findOne(conditions: object): Promise<T | null> {
     return new Promise<T | null>(async resolve => {
       this.model.findOne(conditions, (err, obj) => {
+        if (err) {
+          console.error(new Error().stack)
+        }
+        resolve(obj)
+      })
+    })
+  }
+
+  protected find(conditions: object): Promise<T[] | null> {
+    return new Promise<T[] | null>(async resolve => {
+      this.model.find(conditions, (err, obj) => {
+        if (err) {
+          console.error(new Error().stack)
+        }
+        resolve(obj)
+      })
+    })
+  }
+
+  protected findById(id: string | number | Object): Promise<T | null> {
+    return new Promise<T | null>(async resolve => {
+      this.model.findById(id, (err, obj) => {
         if (err) {
           console.error(new Error().stack)
         }

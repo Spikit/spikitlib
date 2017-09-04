@@ -14,5 +14,5 @@ export declare class Auth extends Model<UserAuth> {
     protected authField: string;
     protected authPassField: string;
     login(auth: any, authPass: string): Promise<UserAuth | null>;
-    register(req: Request): Promise<void>;
+    register(req: Request): Promise<UserAuth | null>;
 }

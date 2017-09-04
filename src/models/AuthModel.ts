@@ -8,7 +8,7 @@ export interface UserAuth extends Document {
   password: string
 }
 
-export class Auth extends Model<UserAuth>{
+export class Auth extends Model<UserAuth> {
 
   protected collection: string = 'auth'
   protected name: string = 'auth'
@@ -36,8 +36,17 @@ export class Auth extends Model<UserAuth>{
     return null
   }
 
-  public async register(req: Request) {
-    console.log(this.model)
+  public async register(req: Request): Promise<UserAuth | null> {
+    return new Promise<UserAuth | null>(resolve => {
+      let user: any = new this.model
+      user[this.authField] = req.body.email
+      user[this.authPassField] = Password.hash(req.body.password)
+      user.validate(async (err: any) => {
+        (!err && user.save((err: any, obj: UserAuth) => {
+          resolve(obj)
+        })) || resolve(null)
+      })
+    })
   }
 
 }

@@ -10,6 +10,8 @@ export class UserAuth extends Middleware {
   public loginRedirectSuccess: string = '/home'
   public loginRedirectFail: string = '/auth/login'
   public logoutRedirect: string = '/'
+  public registerRedirectSuccess: string = '/auth/login'
+  public registerRedirectFail: string = '/auth/register'
 
   public constructor() {
     super()
@@ -25,8 +27,21 @@ export class UserAuth extends Middleware {
 
   private _register() {
     let router = new SpikitRouter('/auth/register')
-    router.post((async (req: SpikitRequest, res: Response) => {
-      let user = new AuthModel().register(req.body)
+    router.all((async (req: SpikitRequest, res: Response) => {
+      let user = await new AuthModel().register(req)
+      if (user) {
+        if (req.xhr) {
+          return res.send({ success: true })
+        } else {
+          return res.redirect(this.registerRedirectSuccess)
+        }
+      } else {
+        if (req.xhr) {
+          return res.send({ success: false })
+        } else {
+          return res.redirect(this.registerRedirectFail)
+        }
+      }
     }).bind(router))
     router.apply()
   }
@@ -55,7 +70,7 @@ export class UserAuth extends Middleware {
 
   private _logout() {
     let router = new SpikitRouter('/auth/logout')
-    router.get((async (req: SpikitRequest, res: Response, next: NextFunction) => {
+    router.all((async (req: SpikitRequest, res: Response, next: NextFunction) => {
       req.session && req.session.destroy(err => {
         if (!err) {
           if (req.xhr) {

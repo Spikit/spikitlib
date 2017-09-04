@@ -11,4 +11,6 @@ export declare abstract class Model<T extends Document> {
     protected readonly model: MongooseModel<T>;
     private makeModel();
     protected findOne(conditions: object): Promise<T | null>;
+    protected find(conditions: object): Promise<T[] | null>;
+    protected findById(id: string | number | Object): Promise<T | null>;
 }
