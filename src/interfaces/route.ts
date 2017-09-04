@@ -9,5 +9,5 @@ export interface RouteGroupOptions {
 }
 
 export interface RouteController {
-  (req: SpikitRequest): Response | View | void
+  (req: SpikitRequest, res: ExpressResponse, next: NextFunction): Response | View | void
 }

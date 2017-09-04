@@ -11,21 +11,20 @@ export class UserAuth extends Middleware {
   public loginRedirectFail: string = '/auth/login'
   public logoutRedirect: string = '/'
 
-  private createdRoutes: boolean = false
+  public constructor() {
+    super()
+    this._login()
+    this._logout()
+  }
 
   public handle(req: SpikitRequest, res: Response, next: NextFunction) {
     req.auth = new auth(req)
-    if (!this.createdRoutes) {
-      this._login(req, res)
-      this._logout(req, res, next)
-      this.createdRoutes = true
-    }
     next()
   }
 
-  private _login(req: SpikitRequest, res: Response) {
+  private _login(/* req: SpikitRequest, res: Response */) {
     let router = new SpikitRouter('/auth/login')
-    router.post((async (req: SpikitRequest) => {
+    router.post((async (req: SpikitRequest, res: Response) => {
       let user = await new AuthModel()
       let uAuth = user.login(req.body.username, req.body.password)
       if (uAuth && req.session) {
@@ -45,9 +44,9 @@ export class UserAuth extends Middleware {
     router.apply()
   }
 
-  private _logout(req: SpikitRequest, res: Response, next: NextFunction) {
+  private _logout() {
     let router = new SpikitRouter('/auth/logout')
-    router.get((async (req: SpikitRequest) => {
+    router.get((async (req: SpikitRequest, res: Response, next: NextFunction) => {
       req.session && req.session.destroy(err => {
         if (!err) {
           if (req.xhr) {

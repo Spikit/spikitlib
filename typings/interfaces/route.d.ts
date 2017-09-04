@@ -1,3 +1,5 @@
+/// <reference types="express" />
+import { Response as ExpressResponse, NextFunction } from 'express';
 import { Response, View } from '../core/responses';
 import { SpikitRequest } from '.';
 export interface RouteGroupOptions {
@@ -6,5 +8,5 @@ export interface RouteGroupOptions {
     prefix?: string;
 }
 export interface RouteController {
-    (req: SpikitRequest): Response | View | void;
+    (req: SpikitRequest, res: ExpressResponse, next: NextFunction): Response | View | void;
 }

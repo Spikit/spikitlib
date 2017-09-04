@@ -59,7 +59,7 @@ export abstract class Route {
     this._lastRoute = this._getPath(routePath)
     this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.get(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
-      await Route._runRoute(controller, req, res)
+      await Route._runRoute(controller, req, res, next)
     })
     return this._router
   }
@@ -69,7 +69,7 @@ export abstract class Route {
     this._lastRoute = this._getPath(routePath)
     this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.post(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
-      await Route._runRoute(controller, req, res)
+      await Route._runRoute(controller, req, res, next)
     })
     return this._router
   }
@@ -79,7 +79,7 @@ export abstract class Route {
     this._lastRoute = this._getPath(routePath)
     this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.put(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
-      await Route._runRoute(controller, req, res)
+      await Route._runRoute(controller, req, res, next)
     })
     return this._router
   }
@@ -89,7 +89,7 @@ export abstract class Route {
     this._lastRoute = this._getPath(routePath)
     this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.delete(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
-      await Route._runRoute(controller, req, res)
+      await Route._runRoute(controller, req, res, next)
     })
     return this._router
   }
@@ -99,7 +99,7 @@ export abstract class Route {
     this._lastRoute = this._getPath(routePath)
     this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.patch(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
-      await Route._runRoute(controller, req, res)
+      await Route._runRoute(controller, req, res, next)
     })
     return this._router
   }
@@ -109,7 +109,7 @@ export abstract class Route {
     this._lastRoute = this._getPath(routePath)
     this._router = new SpikitRouter(this._lastRoute, this._currentMiddleware)
     this._router.all(async (req: SpikitRequest, res: ExpressResponse, next: NextFunction) => {
-      await Route._runRoute(controller, req, res)
+      await Route._runRoute(controller, req, res, next)
     })
     return this._router
   }
@@ -121,9 +121,9 @@ export abstract class Route {
     }
   }
 
-  private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController): Promise<Response | View | void> {
+  private static async _runController(req: SpikitRequest, res: ExpressResponse, controller: RouteController, next: NextFunction): Promise<Response | View | void> {
     if (typeof controller == 'function') {
-      let response = await controller(req)
+      let response = await controller(req, res, next)
       if (response instanceof Response) {
         res.status(response.statusCode)
       }
@@ -171,12 +171,12 @@ export abstract class Route {
     return error
   }
 
-  private static async _runRoute(controller: RouteController | string, req: SpikitRequest, res: ExpressResponse) {
+  private static async _runRoute(controller: RouteController | string, req: SpikitRequest, res: ExpressResponse, next: NextFunction) {
     let response
     try {
       App.host = `${req.protocol}://${req.get('host')}`
       controller = await Route._getController(controller)
-      response = await Route._runController(req, res, controller)
+      response = await Route._runController(req, res, controller, next)
     } catch (e) {
       console.error(e.stack)
     }

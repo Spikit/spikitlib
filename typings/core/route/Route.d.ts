@@ -24,8 +24,8 @@ export declare abstract class Route {
     static patch(routePath: string, controller: RouteController | string): SpikitRouter;
     static all(routePath: string, controller: RouteController | string): SpikitRouter;
     static applyCurrentRoute(): void;
-    private static _runController(req, res, controller);
-    private static _runRoute(controller, req, res);
+    private static _runController(req, res, controller, next);
+    private static _runRoute(controller, req, res, next);
     private static _getPath(routePath);
     private static _getController(controller);
     private static _getControllerFromString(string);
