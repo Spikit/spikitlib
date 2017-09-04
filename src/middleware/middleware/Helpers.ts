@@ -1,9 +1,9 @@
 import { Response, NextFunction } from 'express'
-import { SpikitRequest } from '../interfaces'
-import { Middleware } from './Middleware'
-import { App } from '../core'
-import { Helper } from '../helpers/Helper'
-import { View } from '../core/responses'
+import { SpikitRequest } from '../../interfaces'
+import { Middleware } from '../Middleware'
+import { App } from '../../core'
+import { Helper } from '../../helpers/Helper'
+import { View } from '../../core/responses'
 
 import * as glob from 'glob'
 

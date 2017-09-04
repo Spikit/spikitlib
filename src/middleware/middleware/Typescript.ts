@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express'
-import { SpikitRequest } from '../interfaces'
-import { Middleware } from './Middleware'
-import { App } from '../core'
+import { SpikitRequest } from '../../interfaces'
+import { Middleware } from '../Middleware'
+import { App } from '../../core'
 
 import * as fs from 'fs'
 import * as glob from 'glob'

@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express'
-import { SpikitRequest } from '../interfaces'
-import { App } from '../core'
-import { Middleware } from './Middleware'
+import { SpikitRequest } from '../../interfaces'
+import { App } from '../../core'
+import { Middleware } from '../Middleware'
 
 export class Locale extends Middleware {
 

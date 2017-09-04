@@ -9,7 +9,7 @@ import * as path from 'path'
 import * as glob from 'glob'
 import { MongoError } from 'mongodb'
 
-import { AppOptions, AppServerOptions, AppKernel } from '../interfaces'
+import { AppOptions, AppServerOptions, AppKernel, SpikitRequest } from '../interfaces'
 import { Route } from './route/Route'
 import { Typescript } from '../middleware'
 
@@ -108,6 +108,12 @@ export class App {
     options.kernel.middleware.forEach(m => {
       let mw = new m
       this._express.use(mw.handle.bind(mw));
+    })
+
+    this._express.use((req: SpikitRequest, res, next) => {
+      req.input = function (key: string, fallback: any = '') {
+        return req.params[key] || req.body[key] || fallback
+      }
     })
 
     // Setup the view engine

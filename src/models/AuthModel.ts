@@ -2,6 +2,7 @@ import { Request } from 'express'
 import { Document, Schema } from 'mongoose'
 import { Model } from '../core/Model'
 import { Password } from '../core/Password'
+import { SpikitRequest } from '../interfaces'
 
 export interface UserAuth extends Document {
   email: string
@@ -36,11 +37,11 @@ export class Auth extends Model<UserAuth> {
     return null
   }
 
-  public async register(req: Request): Promise<UserAuth | null> {
+  public async register(req: SpikitRequest): Promise<UserAuth | null> {
     return new Promise<UserAuth | null>(resolve => {
       let user: any = new this.model
       user[this.authField] = req.body.email
-      user[this.authPassField] = Password.hash(req.body.password)
+      user[this.authPassField] = Password.hash(req.input('password'))
       user.validate(async (err: any) => {
         (!err && user.save((err: any, obj: UserAuth) => {
           resolve(obj)
