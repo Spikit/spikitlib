@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Express, RequestHandler } from 'express'
+import { Express, RequestHandler, NextFunction } from 'express'
 import * as session from 'express-session'
 import * as sass from 'node-sass-middleware'
 import * as bodyParser from 'body-parser'
@@ -110,10 +110,11 @@ export class App {
       this._express.use(mw.handle.bind(mw));
     })
 
-    this._express.use((req: SpikitRequest, res, next) => {
+    this._express.use((req: SpikitRequest, res, next: NextFunction) => {
       req.input = function (key: string, fallback: any = '') {
         return req.params[key] || req.body[key] || fallback
       }
+      next()
     })
 
     // Setup the view engine
