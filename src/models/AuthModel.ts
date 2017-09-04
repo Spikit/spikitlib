@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import { Document, Schema } from 'mongoose'
 import { Model } from '../core/Model'
 import { Password } from '../core/Password'
@@ -33,6 +34,10 @@ export class Auth extends Model<UserAuth>{
       return user
     }
     return null
+  }
+
+  public async register(req: Request) {
+    console.log(this.model)
   }
 
 }

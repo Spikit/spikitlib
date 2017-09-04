@@ -8,6 +8,7 @@ export declare class UserAuth extends Middleware {
     logoutRedirect: string;
     constructor();
     handle(req: SpikitRequest, res: Response, next: NextFunction): void;
+    private _register();
     private _login();
     private _logout();
 }

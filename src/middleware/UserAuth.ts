@@ -15,6 +15,7 @@ export class UserAuth extends Middleware {
     super()
     this._login()
     this._logout()
+    this._register()
   }
 
   public handle(req: SpikitRequest, res: Response, next: NextFunction) {
@@ -22,10 +23,18 @@ export class UserAuth extends Middleware {
     next()
   }
 
-  private _login(/* req: SpikitRequest, res: Response */) {
+  private _register() {
+    let router = new SpikitRouter('/auth/register')
+    router.post((async (req: SpikitRequest, res: Response) => {
+      let user = new AuthModel().register(req.body)
+    }).bind(router))
+    router.apply()
+  }
+
+  private _login() {
     let router = new SpikitRouter('/auth/login')
     router.post((async (req: SpikitRequest, res: Response) => {
-      let user = new AuthModel()
+      let user = new AuthModel
       let uAuth = await user.login(req.body.username, req.body.password)
       if (uAuth && req.session) {
         req.session.user = uAuth
