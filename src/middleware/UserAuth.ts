@@ -24,9 +24,17 @@ export class UserAuth extends Middleware {
       let uAuth = user.login(req.body.username, req.body.password)
       if (uAuth && req.session) {
         req.session.user = uAuth
-        res.redirect(this.loginRedirectSuccess)
+        if (req.xhr) {
+          return res.send({ success: true })
+        } else {
+          return res.redirect(this.loginRedirectSuccess)
+        }
       }
-      res.redirect(this.loginRedirectFail)
+      if (req.xhr) {
+        res.send({ success: false })
+      } else {
+        res.redirect(this.loginRedirectFail)
+      }
     }).bind(router))
     router.apply()
   }
@@ -35,7 +43,13 @@ export class UserAuth extends Middleware {
     let router = new SpikitRouter('/auth/logout')
     router.get((async (req: SpikitRequest) => {
       req.session && req.session.destroy(err => {
-        if (!err) { return res.redirect(this.logoutRedirect) }
+        if (!err) {
+          if (req.xhr) {
+            return res.send({ success: true })
+          } else {
+            return res.redirect(this.logoutRedirect)
+          }
+        }
         next()
       })
     }).bind(router))
