@@ -25,8 +25,8 @@ export class UserAuth extends Middleware {
   private _login(/* req: SpikitRequest, res: Response */) {
     let router = new SpikitRouter('/auth/login')
     router.post((async (req: SpikitRequest, res: Response) => {
-      let user = await new AuthModel()
-      let uAuth = user.login(req.body.username, req.body.password)
+      let user = new AuthModel()
+      let uAuth = await user.login(req.body.username, req.body.password)
       if (uAuth && req.session) {
         req.session.user = uAuth
         if (req.xhr) {
